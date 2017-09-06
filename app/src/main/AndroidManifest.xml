@@ -16,6 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".SeasonsActivity" />
+        <activity android:name=".FavoritesActivity" />
+        <activity android:name=".MushroomsActivity" />
+        <activity android:name=".BerriesActivity" />
+        <activity android:name=".PlantsActivity"></activity>
     </application>
 
 </manifest>

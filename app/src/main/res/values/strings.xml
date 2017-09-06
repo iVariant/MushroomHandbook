@@ -5,4 +5,7 @@
     <string name="buttonMushrooms">Грибы</string>
     <string name="buttonPlants">Растения</string>
     <string name="buttonFavorites">Избранное</string>
+    <string name="menu_about">О программе</string>
+    <string name="menu_close">Закрыть</string>
+    <string name="menu_text">Справочник грибника 1.0\nАвторские права (С) 2017\nСвободное распространение\nРазработал: Аксенчик Вадим\nEmail:ix.variant@gmail.com</string>
 </resources>
