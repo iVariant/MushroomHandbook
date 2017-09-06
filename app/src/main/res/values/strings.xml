@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">MushroomHandbook</string>
+    <string name="app_name">Справочник грибника</string>
+    <string name="buttonSeasons">Сезоны</string>
+    <string name="buttonBerries">Ягоды</string>
+    <string name="buttonMushrooms">Грибы</string>
+    <string name="buttonPlants">Растения</string>
+    <string name="buttonFavorites">Избранное</string>
 </resources>
