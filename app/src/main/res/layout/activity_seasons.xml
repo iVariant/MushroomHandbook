@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.ixvar.mushroomhandbook.SeasonsActivity">
+    tools:context="com.example.ixvar.mushroomhandbook.activities.SeasonsActivity">
 
     <ExpandableListView
-        android:layout_width="344dp"
-        android:layout_height="495dp"
-        tools:layout_editor_absoluteX="8dp"
+        android:id="@+id/exListView"
+        android:layout_width="395dp"
+        android:layout_height="587dp"
         tools:layout_editor_absoluteY="8dp" />
 </android.support.constraint.ConstraintLayout>

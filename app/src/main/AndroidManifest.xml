@@ -9,18 +9,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".activities.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SeasonsActivity" />
-        <activity android:name=".FavoritesActivity" />
-        <activity android:name=".MushroomsActivity" />
-        <activity android:name=".BerriesActivity" />
-        <activity android:name=".PlantsActivity"></activity>
+        <activity android:name=".activities.SeasonsActivity" />
+        <activity android:name=".activities.FavoritesActivity" />
+        <activity android:name=".activities.MushroomsActivity" />
+
+        <activity
+            android:name=".activities.BerriesActivity"
+            android:theme="@style/MyTheme"></activity>
+
+        <activity android:name=".activities.PlantsActivity" />
+        <activity
+            android:name=".activities.ScrollingActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -5,17 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg"
-    tools:context="com.example.ixvar.mushroomhandbook.MainActivity">
+    tools:context="com.example.ixvar.mushroomhandbook.activities.MainActivity">
 
     <Button
         android:id="@+id/buttonBerries"
         android:layout_width="120dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="193dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="193dp"
         android:background="@android:color/transparent"
         android:drawableLeft="@drawable/ic_blueberries"
         android:drawablePadding="3dp"
@@ -23,20 +18,16 @@
         android:onClick="buttonBerriesClick"
         android:text="@string/buttonBerries"
         android:textSize="18sp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/buttonPlants"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/buttonPlants" />
 
     <Button
         android:id="@+id/buttonMushrooms"
         android:layout_width="120dp"
         android:layout_height="50dp"
         android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="193dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="193dp"
         android:background="@android:color/transparent"
         android:drawableLeft="@drawable/ic_mushrooms"
         android:drawablePadding="3dp"
@@ -45,9 +36,8 @@
         android:text="@string/buttonMushrooms"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonBerries"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/buttonBerries" />
 
     <Button
         android:id="@+id/buttonFavorites"
@@ -71,10 +61,6 @@
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="193dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="193dp"
         android:background="@android:color/transparent"
         android:drawableLeft="@drawable/ic_leaf"
         android:drawablePadding="3dp"
@@ -83,9 +69,8 @@
         android:text="@string/buttonPlants"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintLeft_toRightOf="@+id/buttonSeasons"
+        android:layout_marginLeft="56dp" />
 
     <Button
         android:id="@+id/buttonSeasons"
