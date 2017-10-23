@@ -3,6 +3,7 @@ package com.example.ixvar.mushroomhandbook.activities;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -25,6 +26,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.ixvar.mushroomhandbook.R;
 import com.example.ixvar.mushroomhandbook.adapter.DessertAdapter;
@@ -43,17 +46,20 @@ public class BerriesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_berries);
+        setContentView(R.layout.activity_bd_product);
 
         handbookDatabaseHelper = new DatabaseHelper(getApplicationContext());
 
+
+        ImageView imageViewHeader = (ImageView) findViewById(R.id.htab_header);
+        imageViewHeader.setImageResource(R.drawable.berries_header);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.htab_toolbar);
         setSupportActionBar(toolbar);
 
 
 
-        if (getSupportActionBar() != null) getSupportActionBar().setTitle("Parallax Tabs");
+        if (getSupportActionBar() != null) getSupportActionBar().setTitle(R.string.buttonBerries);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
@@ -66,15 +72,17 @@ public class BerriesActivity extends AppCompatActivity {
 
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.htab_collapse_toolbar);
 
+
+
         try {
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.header);
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.berries_header); //header
             Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
                 @SuppressWarnings("ResourceType")
                 @Override
                 public void onGenerated(Palette palette) {
 
-                    int vibrantColor = palette.getVibrantColor(R.color.primary_500);
-                    int vibrantDarkColor = palette.getDarkVibrantColor(R.color.primary_700);
+                    int vibrantColor = palette.getVibrantColor(R.color.colorPrimary);
+                    int vibrantDarkColor = palette.getDarkVibrantColor(R.color.colorPrimaryDark);
                     collapsingToolbarLayout.setContentScrimColor(vibrantColor);
                     collapsingToolbarLayout.setStatusBarScrimColor(vibrantDarkColor);
                 }
@@ -87,10 +95,10 @@ public class BerriesActivity extends AppCompatActivity {
 
 
             collapsingToolbarLayout.setContentScrimColor(
-                    ContextCompat.getColor(this, R.color.primary_500)
+                    ContextCompat.getColor(this, R.color.colorPrimary)
             );
             collapsingToolbarLayout.setStatusBarScrimColor(
-                    ContextCompat.getColor(this, R.color.primary_700)
+                    ContextCompat.getColor(this, R.color.colorPrimaryDark)
             );
         }
 
@@ -132,22 +140,38 @@ public class BerriesActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new DummyFragment(
-                ContextCompat.getColor(this, R.color.cyan_50)), "Cyan");
+
+        try {
+            db = handbookDatabaseHelper.getReadableDatabase();
+
+            userCursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIES_TYPE, null);
+
+            while (userCursor.moveToNext()) {
+                adapter.addFrag(new DummyFragment(
+                        ContextCompat.getColor(this, userCursor.getInt(2))), userCursor.getString(1));
+                //adapter.addFrag(new DummyFragment(ContextCompat.getColor(this, userCursor.getInt(2))), userCursor.getString(1)));
+                //Log.d("f","-----" + userCursor.getString(1) + "   " + userCursor.getInt(2) + "\n" );
+
+            }
+
+        } catch(SQLiteException e) {
+            Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
+      /*  adapter.addFrag(new DummyFragment(
+                ContextCompat.getColor(this, R.color.cyan_50)), "Cyan34");
         adapter.addFrag(new DummyFragment(
                 ContextCompat.getColor(this, R.color.amber_50)), "Amber");
+*/
 
-
-
-        /*adapter.addFrag(new DummyFragment(
-                ContextCompat.getColor(this, R.color.purple_50)), "Purple");*/
         viewPager.setAdapter(adapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_berries, menu);
+        getMenuInflater().inflate(R.menu.menu_bd_poduct, menu);
         return true;
     }
 
@@ -222,4 +246,10 @@ public class BerriesActivity extends AppCompatActivity {
             return view;
         }
     }
+
+
+
+
+
+
 }

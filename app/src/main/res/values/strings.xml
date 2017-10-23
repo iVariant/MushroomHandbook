@@ -98,7 +98,8 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
-    <string name="action_settings">Settings</string>
+
+    <string name="action_info">Настройки</string>
 
 
     <string name="berries_size_small">Маленький</string>
@@ -129,6 +130,7 @@
     <string name="season_October">Октябрь</string>
     <string name="season_November">Ноябрь</string>
     <string name="season_December">Декабрь</string>
+
 
 
 </resources>

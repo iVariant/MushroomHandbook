@@ -2,6 +2,7 @@ package com.example.ixvar.mushroomhandbook.bd;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -70,7 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String COLUMN_BERRIES_TYPE_ID = "_id";
     public static final String COLUMN_BERRIES_TYPE_NAME = "name";
-
+    public static final String COLUMN_BERRIES_TYPE_COLOR = "color";
 
     public static final String COLUMN_BERRIES_ID = "_id";
     public static final String COLUMN_BERRIES_NAME = "name";
@@ -83,8 +84,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_BERRIES_SEASON = "berries_season";
     public static final String COLUMN_BERRIES_PLACE = "berries_place";
 
+    private Resources res;
+
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        res = context.getResources();
     }
 
     @Override
@@ -101,10 +106,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE " + TABLE_BERRIES_TYPE + " ("
                 + COLUMN_BERRIES_TYPE_ID + " INTEGER PRIMARY KEY, "
-                + COLUMN_BERRIES_TYPE_NAME + " INTEGER NOT NULL);");
+                + COLUMN_BERRIES_TYPE_NAME + " TEXT NOT NULL, "
+                + COLUMN_BERRIES_TYPE_COLOR + " INTEGER NOT NULL);");
 
-        insertBerriesType(db,1, R.string.berries_type_edible);
-        insertBerriesType(db,2, R.string.berries_type_inedible);
+        insertBerriesType(db,1, res.getString(R.string.berries_type_edible),R.color.green_50);
+        insertBerriesType(db,2, res.getString(R.string.berries_type_inedible),R.color.red_50);
 
 
         db.execSQL("CREATE TABLE " + TABLE_BERRIES_COLOR + " ("
@@ -199,10 +205,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_BERRIES_SIZE, null, berriesSizeValues);
         }
 
-    private static void insertBerriesType(SQLiteDatabase db,int id, int resourceId) {
+    private static void insertBerriesType(SQLiteDatabase db,int id, String name,int resourceIdColor) {
         ContentValues berriesTypeValues = new ContentValues();
         berriesTypeValues.put(COLUMN_BERRIES_TYPE_ID, id);
-        berriesTypeValues.put(COLUMN_BERRIES_TYPE_NAME, resourceId);
+        berriesTypeValues.put(COLUMN_BERRIES_TYPE_NAME, name);
+        berriesTypeValues.put(COLUMN_BERRIES_TYPE_COLOR, resourceIdColor);
 
         db.insert(TABLE_BERRIES_TYPE, null, berriesTypeValues);
     }

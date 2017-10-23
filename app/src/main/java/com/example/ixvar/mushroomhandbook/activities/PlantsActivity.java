@@ -10,6 +10,6 @@ public class PlantsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plants);
+        setContentView(R.layout.activity_bd_product);
     }
 }

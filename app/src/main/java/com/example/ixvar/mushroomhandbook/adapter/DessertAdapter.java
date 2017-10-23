@@ -2,6 +2,7 @@ package com.example.ixvar.mushroomhandbook.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class DessertAdapter extends RecyclerView.Adapter<DessertAdapter.DessertV
         holder.mName.setText(dessert.getName());
         holder.mDescription.setText(dessert.getDescription());
         holder.mFirstLetter.setText(String.valueOf(dessert.getFirstLetter()));
+
 
     }
 
