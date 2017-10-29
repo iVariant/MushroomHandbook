@@ -1,4 +1,4 @@
-package com.example.ixvar.mushroomhandbook.activities;
+package com.example.ixvar.mushroomhandbook.Activity;
 
 import android.annotation.SuppressLint;
 import android.database.Cursor;
@@ -30,8 +30,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.ixvar.mushroomhandbook.R;
-import com.example.ixvar.mushroomhandbook.adapter.DessertAdapter;
-import com.example.ixvar.mushroomhandbook.bd.DatabaseHelper;
+import com.example.ixvar.mushroomhandbook.Adapter.ProductAdapter;
+import com.example.ixvar.mushroomhandbook.BD.DatabaseHelper;
+import com.example.ixvar.mushroomhandbook.Model.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -148,9 +149,7 @@ public class BerriesActivity extends AppCompatActivity {
 
             while (userCursor.moveToNext()) {
                 adapter.addFrag(new DummyFragment(
-                        ContextCompat.getColor(this, userCursor.getInt(2))), userCursor.getString(1));
-                //adapter.addFrag(new DummyFragment(ContextCompat.getColor(this, userCursor.getInt(2))), userCursor.getString(1)));
-                //Log.d("f","-----" + userCursor.getString(1) + "   " + userCursor.getInt(2) + "\n" );
+                        ContextCompat.getColor(this, R.color.bg_light_blue)), userCursor.getString(1) );
 
             }
 
@@ -159,11 +158,6 @@ public class BerriesActivity extends AppCompatActivity {
             toast.show();
         }
 
-      /*  adapter.addFrag(new DummyFragment(
-                ContextCompat.getColor(this, R.color.cyan_50)), "Cyan34");
-        adapter.addFrag(new DummyFragment(
-                ContextCompat.getColor(this, R.color.amber_50)), "Amber");
-*/
 
         viewPager.setAdapter(adapter);
     }
@@ -240,8 +234,19 @@ public class BerriesActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(linearLayoutManager);
             recyclerView.setHasFixedSize(true);
 
-            DessertAdapter adapter = new DessertAdapter(getContext());
+//------------------===============----------------------
+            List<Product> products;
+            products = new ArrayList<>();
+
+
+            ProductAdapter adapter = new ProductAdapter(products);
             recyclerView.setAdapter(adapter);
+
+            products.add(new Product(1,"FirstName","Moloko,mamka,gg,Meow",R.drawable.header));
+            products.add(new Product(2,"SecondName","Moloko,mamka,gg,Meow",R.drawable.autumn));
+            products.add(new Product(3,"Seco5ndName","Mo,gg,Meow",R.drawable.spring));
+            products.add(new Product(4,"Second4Name","Moloko,mamka,gg,Meow",R.drawable.summer));
+            products.add(new Product(5,"SecondN4ame","gg,Meow",R.drawable.winter));
 
             return view;
         }

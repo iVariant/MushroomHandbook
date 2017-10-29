@@ -99,7 +99,7 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
 
-    <string name="action_info">Настройки</string>
+    <string name="action_info">Информация</string>
 
 
     <string name="berries_size_small">Маленький</string>
@@ -130,6 +130,9 @@
     <string name="season_October">Октябрь</string>
     <string name="season_November">Ноябрь</string>
     <string name="season_December">Декабрь</string>
+
+    <string name="menu_search">Найти...</string>
+
 
 
 

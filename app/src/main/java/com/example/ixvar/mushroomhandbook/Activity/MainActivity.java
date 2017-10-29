@@ -1,4 +1,4 @@
-package com.example.ixvar.mushroomhandbook.activities;
+package com.example.ixvar.mushroomhandbook.Activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

@@ -1,4 +1,4 @@
-package com.example.ixvar.mushroomhandbook.activities;
+package com.example.ixvar.mushroomhandbook.Activity;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -18,13 +18,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.ixvar.mushroomhandbook.ContentFragment;
 import com.example.ixvar.mushroomhandbook.R;
-import com.example.ixvar.mushroomhandbook.bd.DatabaseHelper;
+import com.example.ixvar.mushroomhandbook.BD.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +68,7 @@ public class ScrollingActivity extends AppCompatActivity {
         try {
             db =  handbookDatabaseHelper.getReadableDatabase();
 
-            userCursor =  db.rawQuery("select * from " + DatabaseHelper.TABLE_PICTURES , null);
+            userCursor =  db.rawQuery("select * from " + DatabaseHelper.TABLE_BERRIE_PICTURES , null); // тут
 
             while (userCursor.moveToNext()) {
                 int pictureREs = userCursor.getInt(1);

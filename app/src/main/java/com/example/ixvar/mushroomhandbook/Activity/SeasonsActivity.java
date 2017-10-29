@@ -1,4 +1,4 @@
-package com.example.ixvar.mushroomhandbook.activities;
+package com.example.ixvar.mushroomhandbook.Activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
