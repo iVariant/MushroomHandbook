@@ -8,6 +8,7 @@
     <string name="menu_about">О программе</string>
     <string name="menu_close">Закрыть</string>
     <string name="menu_text">Справочник грибника 1.0\nАвторские права (С) 2017\nСвободное распространение\nРазработал: Аксенчик Вадим\nEmail:ix.variant@gmail.com</string>
+
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
@@ -133,7 +134,9 @@
 
     <string name="menu_search">Найти...</string>
 
-
+    <string name="berrie_name_wild_cherry">Дикая вишня</string>
+    <string name="berrie_name_wolf_bast">Волчье лыко</string>
+    <string name="berrie_name_raven_eye">Вороний глаз</string>
 
 
 </resources>

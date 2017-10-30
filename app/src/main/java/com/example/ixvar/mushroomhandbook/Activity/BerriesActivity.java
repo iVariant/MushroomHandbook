@@ -29,6 +29,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.ixvar.mushroomhandbook.Model.Berrie;
 import com.example.ixvar.mushroomhandbook.R;
 import com.example.ixvar.mushroomhandbook.Adapter.ProductAdapter;
 import com.example.ixvar.mushroomhandbook.BD.DatabaseHelper;
@@ -40,9 +41,12 @@ import java.util.List;
 public class BerriesActivity extends AppCompatActivity {
 
     private static final String TAG = BerriesActivity.class.getSimpleName();
+
     private SQLiteDatabase db;
     private Cursor userCursor;
     private DatabaseHelper handbookDatabaseHelper;
+
+    private List<Berrie> berries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,8 @@ public class BerriesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bd_product);
 
         handbookDatabaseHelper = new DatabaseHelper(getApplicationContext());
+
+
 
 
         ImageView imageViewHeader = (ImageView) findViewById(R.id.htab_header);
@@ -93,8 +99,6 @@ public class BerriesActivity extends AppCompatActivity {
             // if Bitmap fetch fails, fallback to primary colors
             Log.e(TAG, "onCreate: failed to create bitmap from background", e.fillInStackTrace());
 
-
-
             collapsingToolbarLayout.setContentScrimColor(
                     ContextCompat.getColor(this, R.color.colorPrimary)
             );
@@ -130,26 +134,143 @@ public class BerriesActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        userCursor.close();
-        db.close();
+
+
+
+    //=---------------------------------------
+
+    String getColorBerrie(int idColor)
+    {
+        Cursor cursorColor;
+        String color = "";
+
+        cursorColor = db.query (handbookDatabaseHelper.TABLE_BERRIES_COLOR,
+                new String[] {handbookDatabaseHelper.COLUMN_BERRIES_COLOR_NAME},
+                "_id = ?",
+                new String[] {Integer.toString(idColor)},
+                null, null,null);
+
+        if (cursorColor.moveToFirst()) {
+            color = cursorColor.getString(0);
+        }
+
+        cursorColor.close();
+
+        return color;
+    }
+
+    String getTypeBerrie(int idType)
+    {
+        Cursor cursorType;
+        String type = "";
+
+        cursorType = db.query (handbookDatabaseHelper.TABLE_BERRIES_TYPE,
+                new String[] {handbookDatabaseHelper.COLUMN_BERRIES_TYPE_NAME},
+                "_id = ?",
+                new String[] {Integer.toString(idType)},
+                null, null,null);
+
+        if (cursorType.moveToFirst()) {
+            type = cursorType.getString(0);
+        }
+
+        cursorType.close();
+
+        return type;
+    }
+
+    String getSizeBerrie(int idSize)
+    {
+        Cursor cursorSize;
+        String size = "";
+
+        cursorSize = db.query (handbookDatabaseHelper.TABLE_BERRIES_SIZE,
+                new String[] {handbookDatabaseHelper.COLUMN_BERRIES_SIZE_NAME},
+                "_id = ?",
+                new String[] {Integer.toString(idSize)},
+                null, null,null);
+
+        if (cursorSize.moveToFirst()) {
+            size = cursorSize.getString(0);
+        }
+
+        cursorSize.close();
+
+        return size;
+    }
+
+    String getSeasonsBerrie(int idBerrie)
+    {
+        Cursor cursorSeason;
+        List<Integer> idSeasons = new ArrayList<>();
+
+        String seasons = "";
+
+        cursorSeason = db.query (handbookDatabaseHelper.TABLE_ID_BERRIE__ID_SEASON,
+                new String[] {handbookDatabaseHelper.COLUMN_ID_SEASON},
+                "id_berrie = ?",
+                new String[] {Integer.toString(idBerrie)},
+                null, null,null);
+
+        while (cursorSeason.moveToNext()) {
+            idSeasons.add(cursorSeason.getInt(0));
+        }
+
+
+
+        for(Integer idSeason : idSeasons){
+            cursorSeason = db.query (handbookDatabaseHelper.TABLE_SEASONS,
+                    new String[] {handbookDatabaseHelper.COLUMN_SEASONS_NAME},
+                    "_id = ?",
+                    new String[] {Integer.toString(idSeason)},
+                    null, null,null);
+
+            if (cursorSeason.moveToFirst()) {
+                seasons += cursorSeason.getString(0) + " ";
+            }
+        }
+
+
+        cursorSeason.close();
+
+        return seasons;
+    }
+
+    int[] getPicturesBerrie(int idBerrie)
+    {
+        Cursor cursorPictures;
+        int pictures[] = new int[4];
+
+        cursorPictures = db.query (handbookDatabaseHelper.TABLE_BERRIE_PICTURES,
+                new String[] {handbookDatabaseHelper.COLUMN_BERRIE_PICTURES_ID_BERRIE},
+                "_id = ?",
+                new String[] {Integer.toString(idBerrie)},
+                null, null,null);
+
+        int i = 0;
+        while (cursorPictures.moveToNext()) {
+            pictures[i++] = cursorPictures.getInt(0);
+        }
+
+        cursorPictures.close();
+
+        return pictures;
     }
 
 
+    //=---------------------------------------
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        try {
+      try {
             db = handbookDatabaseHelper.getReadableDatabase();
-
             userCursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIES_TYPE, null);
-
             while (userCursor.moveToNext()) {
-                adapter.addFrag(new DummyFragment(
-                        ContextCompat.getColor(this, R.color.bg_light_blue)), userCursor.getString(1) );
+
+
+
+                adapter.addFrag(new DummyFragment( ContextCompat.getColor(this, R.color.bg_light_blue),getProducts(userCursor.getInt(0))), userCursor.getString(1) );
 
             }
 
@@ -159,27 +280,39 @@ public class BerriesActivity extends AppCompatActivity {
         }
 
 
+
         viewPager.setAdapter(adapter);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_bd_poduct, menu);
-        return true;
+    List<Product> getProducts(int idType)
+    {
+        Cursor cursor;
+
+        List<Product> products;
+        products = new ArrayList<>();
+
+        cursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIES + " WHERE " + handbookDatabaseHelper.COLUMN_BERRIES_TYPE + " = " + idType , null);
+
+
+
+        while (cursor.moveToNext()) {
+            products.add(new Product(cursor.getInt(0),cursor.getString(1),cursor.getString(2),R.drawable.spring));
+        }
+
+
+
+
+       // products.add(new Product(3,"Seco5ndName","Mo,gg,Meow",R.drawable.spring));
+
+        cursor.close();
+
+        return products;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.action_settings:
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+
+
+
+
 
     private static class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
@@ -210,15 +343,22 @@ public class BerriesActivity extends AppCompatActivity {
         }
     }
 
+
+
     public static class DummyFragment extends Fragment {
+
+
         int color;
+        List<Product> products;
+
 
         public DummyFragment() {
         }
 
         @SuppressLint("ValidFragment")
-        public DummyFragment(int color) {
+        public DummyFragment(int color,List<Product> products) {
             this.color = color;
+            this.products = products;
         }
 
         @Override
@@ -235,18 +375,21 @@ public class BerriesActivity extends AppCompatActivity {
             recyclerView.setHasFixedSize(true);
 
 //------------------===============----------------------
-            List<Product> products;
-            products = new ArrayList<>();
 
+
+            //!!!!!!!!!!!!!!!! ЗАменить на ягодную хуйню
 
             ProductAdapter adapter = new ProductAdapter(products);
             recyclerView.setAdapter(adapter);
 
-            products.add(new Product(1,"FirstName","Moloko,mamka,gg,Meow",R.drawable.header));
+
+
+
+           /* products.add(new Product(1,"FirstName","Moloko,mamka,gg,Meow",R.drawable.header));
             products.add(new Product(2,"SecondName","Moloko,mamka,gg,Meow",R.drawable.autumn));
             products.add(new Product(3,"Seco5ndName","Mo,gg,Meow",R.drawable.spring));
             products.add(new Product(4,"Second4Name","Moloko,mamka,gg,Meow",R.drawable.summer));
-            products.add(new Product(5,"SecondN4ame","gg,Meow",R.drawable.winter));
+            products.add(new Product(5,"SecondN4ame","gg,Meow",R.drawable.winter));*/
 
             return view;
         }
@@ -257,4 +400,35 @@ public class BerriesActivity extends AppCompatActivity {
 
 
 
+
+
+
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_bd_poduct, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_settings:
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        userCursor.close();
+        db.close();
+    }
 }

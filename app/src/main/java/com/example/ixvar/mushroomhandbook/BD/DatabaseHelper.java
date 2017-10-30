@@ -15,11 +15,10 @@ import com.example.ixvar.mushroomhandbook.R;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "mushroom_handbook.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 20;
 
     //----------TABLES---------------------------
     public static final String TABLE_SEASONS = "seasons";
-    public static final String TABLE_BERRIE_OTHER_NAMES = "berrie_other_names";
     public static final String TABLE_BERRIE_PICTURES = "berrie_pictures";
 
     public static final String TABLE_ID_BERRIE__ID_SEASON = "id_berrie__id_season";
@@ -54,14 +53,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    public static final String COLUMN_PICTURES_ID = "_id";
-    public static final String COLUMN_PICTURES_RES = "pictureRes";
 
     public static final String COLUMN_SEASONS_ID = "_id";
     public static final String COLUMN_SEASONS_NAME = "name";
 
-    public static final String COLUMN_OTHER_NAMES_ID = "_id";
-    public static final String COLUMN_OTHER_NAMES_NAME = "name";
 
     public static final String COLUMN_BERRIES_COLOR_ID = "_id";
     public static final String COLUMN_BERRIES_COLOR_NAME = "name";
@@ -76,12 +71,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_BERRIE_PICTURES_ID_BERRIE = "id_berrie";
     public static final String COLUMN_BERRIE_PICTURES_RES = "res";
 
-    public static final String COLUMN_BERRIE_OTHER_NAMES_ID = "_id";
-    public static final String COLUMN_BERRIE_OTHER_NAMES_ID_BERRIE = "id_berrie";
-    public static final String COLUMN_BERRIE_OTHER_NAMES_NAME = "name";
 
     public static final String COLUMN_BERRIES_ID = "_id";
     public static final String COLUMN_BERRIES_NAME = "name";
+    public static final String COLUMN_BERRIES_OTHERNAMES = "other_names";
+    public static final String COLUMN_BERRIES_COLOR = "color";
+    public static final String COLUMN_BERRIES_SIZE = "size";
+    public static final String COLUMN_BERRIES_TYPE = "type";
     public static final String COLUMN_BERRIES_DESCRIPTION = "description";
     public static final String COLUMN_BERRIES_FAVORITE = "favorite";
     public static final String COLUMN_BERRIES_PLACE = "berries_place";
@@ -97,7 +93,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL("CREATE TABLE " + TABLE_BERRIES_SIZE + " ("
+        db.execSQL("CREATE TABLE " + TABLE_BERRIES_TYPE + " ("
+                + COLUMN_BERRIES_TYPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_BERRIES_TYPE_NAME + " TEXT NOT NULL);");
+
+        insertBerriesType(db,1, res.getString(R.string.berries_type_edible));
+        insertBerriesType(db,2, res.getString(R.string.berries_type_inedible));
+
+       db.execSQL("CREATE TABLE " + TABLE_BERRIES_SIZE + " ("
                 + COLUMN_BERRIES_SIZE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_BERRIES_SIZE_NAME + " TEXT NOT NULL);");
 
@@ -106,12 +109,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertBerriesSize(db,3, res.getString(R.string.berries_size_big));
 
 
-        db.execSQL("CREATE TABLE " + TABLE_BERRIES_TYPE + " ("
-                + COLUMN_BERRIES_TYPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + COLUMN_BERRIES_TYPE_NAME + " TEXT NOT NULL);");
 
-        insertBerriesType(db,1, res.getString(R.string.berries_type_edible));
-        insertBerriesType(db,2, res.getString(R.string.berries_type_inedible));
 
 
         db.execSQL("CREATE TABLE " + TABLE_BERRIES_COLOR + " ("
@@ -143,29 +141,61 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertSeason(db,11, res.getString(R.string.season_November));
         insertSeason(db,12, res.getString(R.string.season_December));
 
-        db.execSQL("CREATE TABLE " + TABLE_BERRIE_OTHER_NAMES + " ("
-                + COLUMN_BERRIE_OTHER_NAMES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + COLUMN_BERRIE_OTHER_NAMES_NAME + " TEXT NOT NULL), "
-                + COLUMN_BERRIE_OTHER_NAMES_ID_BERRIE + " INTEGER NOT NULL, "
-                +" FOREIGN KEY("+ COLUMN_BERRIE_OTHER_NAMES_ID_BERRIE +") REFERENCES " + TABLE_BERRIES + "("+ COLUMN_BERRIES_ID +"));");
+        db.execSQL("CREATE TABLE " + TABLE_BERRIES + " ("
+                + COLUMN_BERRIES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_BERRIES_NAME + " TEXT NOT NULL, "
+                + COLUMN_BERRIES_OTHERNAMES + " TEXT NOT NULL, "
+                + COLUMN_BERRIES_DESCRIPTION + " TEXT NOT NULL, "
+                + COLUMN_BERRIES_PLACE + " TEXT NOT NULL, "
+                + COLUMN_BERRIES_FAVORITE + " NUMERIC NOT NULL, "
+                + COLUMN_BERRIES_TYPE + " INTEGER NOT NULL, "
+                + COLUMN_BERRIES_SIZE + " INTEGER NOT NULL, "
+                + COLUMN_BERRIES_COLOR + " INTEGER NOT NULL, "
+                +"FOREIGN KEY("+ COLUMN_BERRIES_SIZE +") REFERENCES " + TABLE_BERRIES_SIZE + "("+ COLUMN_BERRIES_SIZE_ID +"), "
+                +"FOREIGN KEY("+ COLUMN_BERRIES_COLOR +") REFERENCES " + TABLE_BERRIES_COLOR + "("+ COLUMN_BERRIES_COLOR_ID +"), "
+                +"FOREIGN KEY("+ COLUMN_BERRIES_TYPE +") REFERENCES " + TABLE_BERRIES_TYPE + "("+ COLUMN_BERRIES_TYPE_ID +"));");
+
+
 
         db.execSQL("CREATE TABLE " + TABLE_BERRIE_PICTURES + " ("
                 + COLUMN_BERRIE_PICTURES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_BERRIE_PICTURES_ID_BERRIE + " INTEGER NOT NULL, "
-                + COLUMN_BERRIE_PICTURES_RES + " INTEGER NOT NULL), "
-                +" FOREIGN KEY("+ COLUMN_BERRIE_PICTURES_ID_BERRIE +") REFERENCES " + TABLE_BERRIES + "("+ COLUMN_BERRIES_ID +"));");
+                + COLUMN_BERRIE_PICTURES_RES + " INTEGER NOT NULL, "
+                +"FOREIGN KEY("+ COLUMN_BERRIE_PICTURES_ID_BERRIE +") REFERENCES " + TABLE_BERRIES + "("+ COLUMN_BERRIES_ID +"));");
 
         db.execSQL("CREATE TABLE " + TABLE_ID_BERRIE__ID_SEASON + " ("
                 + COLUMN_ID_BERRIE + " INTEGER NOT NULL, "
                 + COLUMN_ID_SEASON + " INTEGER NOT NULL);");
 
 
-        db.execSQL("CREATE TABLE " + TABLE_BERRIES + " ("
-                + COLUMN_BERRIES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + COLUMN_BERRIES_NAME + " TEXT NOT NULL, "
-                + COLUMN_BERRIES_DESCRIPTION + " TEXT NOT NULL, "
-                + COLUMN_BERRIES_PLACE + " TEXT NOT NULL, "
-                + COLUMN_BERRIES_FAVORITE + " NUMERIC NOT NULL;");
+        insertBerrie(db,1,res.getString(R.string.berrie_name_wild_cherry),"ujdyj,fe,fef,12,",1,2,2, "fwefwe", "fwef2we",false);
+            insertBerriePicture(db,R.drawable.cherry1,1);
+        insertBerriePicture(db,R.drawable.cherry2,1);
+        insertBerriePicture(db,R.drawable.cherry2,1);
+        insertBerriePicture(db,R.drawable.cherry2,1);
+        insertBerriePicture(db,R.drawable.cherry2,1);
+
+        insertIDberrieIDSeason(db,1,6);
+        insertIDberrieIDSeason(db,1,7);
+
+
+        insertBerrie(db,2,res.getString(R.string.berrie_name_wolf_bast),"ujdyj,f4e,fef,12,",2,1,1, "ffefeef5555vvfe", "fwf232ef2we",false);
+        insertBerriePicture(db,R.drawable.cherry2,2);
+        insertBerriePicture(db,R.drawable.cherry2,2);
+        insertBerriePicture(db,R.drawable.cherry2,2);
+        insertBerriePicture(db,R.drawable.cherry2,2);
+
+        insertIDberrieIDSeason(db,2,3);
+        insertIDberrieIDSeason(db,2,4);
+
+        insertBerrie(db,3,res.getString(R.string.berrie_name_raven_eye),"ujdyj,1fe,fef,12,",2,3,4, "fwefw1!e", "fwef2wfef!!!!!e",false);
+        insertBerriePicture(db,R.drawable.cherry1,3);
+        insertBerriePicture(db,R.drawable.cherry1,3);
+        insertBerriePicture(db,R.drawable.cherry1,3);
+        insertBerriePicture(db,R.drawable.cherry1,3);
+
+        insertIDberrieIDSeason(db,3,3);
+
 
 
 
@@ -185,7 +215,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_BERRIES_TYPE);
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_BERRIES_COLOR);
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_ID_BERRIE__ID_SEASON);
-        db.execSQL("DROP TABLE IF EXISTS "+ TABLE_BERRIE_OTHER_NAMES);
+
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_BERRIE_PICTURES);
 
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_HERBS_TYPE);
@@ -238,18 +268,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    private static void insertBerrieOtherName(SQLiteDatabase db,int id, String name,int idBerrie) {
-        ContentValues otherNameValues = new ContentValues();
-        otherNameValues.put(COLUMN_BERRIE_OTHER_NAMES_ID, id);
-        otherNameValues.put(COLUMN_BERRIE_OTHER_NAMES_NAME, name);
-        otherNameValues.put(COLUMN_BERRIE_OTHER_NAMES_ID_BERRIE, idBerrie);
 
-        db.insert(TABLE_BERRIE_OTHER_NAMES, null, otherNameValues);
-    }
-
-    private static void insertBerriePicture(SQLiteDatabase db,int id, int res, int idBerrie) {
+    private static void insertBerriePicture(SQLiteDatabase db, int res, int idBerrie) {
         ContentValues pictureValues = new ContentValues();
-        pictureValues.put(COLUMN_BERRIE_PICTURES_ID, id);
+
         pictureValues.put(COLUMN_BERRIE_PICTURES_RES, res);
         pictureValues.put(COLUMN_BERRIE_PICTURES_ID_BERRIE, idBerrie);
 
@@ -257,13 +279,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private static void insertIDberrieIDSeason(SQLiteDatabase db,int idBerrie, int idSeason) {
-        ContentValues pictureValues = new ContentValues();
-        pictureValues.put(COLUMN_ID_BERRIE, idBerrie);
-        pictureValues.put(COLUMN_ID_SEASON, idSeason);
+        ContentValues idValues = new ContentValues();
+        idValues.put(COLUMN_ID_BERRIE, idBerrie);
+        idValues.put(COLUMN_ID_SEASON, idSeason);
 
-        db.insert(TABLE_ID_BERRIE__ID_SEASON, null, pictureValues);
+        db.insert(TABLE_ID_BERRIE__ID_SEASON, null, idValues);
     }
 
+    private static void insertBerrie(SQLiteDatabase db,int id, String name,String otherNames,int type,int size, int color, String description, String place, boolean favorite) {
+        ContentValues berrieValues = new ContentValues();
+        berrieValues.put(COLUMN_BERRIES_ID, id);
+        berrieValues.put(COLUMN_BERRIES_NAME, name);
+        berrieValues.put(COLUMN_BERRIES_OTHERNAMES, otherNames);
+        berrieValues.put(COLUMN_BERRIES_TYPE, type);
+        berrieValues.put(COLUMN_BERRIES_SIZE, size);
+        berrieValues.put(COLUMN_BERRIES_COLOR, color);
+        berrieValues.put(COLUMN_BERRIES_DESCRIPTION, description);
+        berrieValues.put(COLUMN_BERRIES_PLACE, place);
+        berrieValues.put(COLUMN_BERRIES_FAVORITE, favorite);
 
+        db.insert(TABLE_BERRIES, null, berrieValues);
+    }
 
 }
