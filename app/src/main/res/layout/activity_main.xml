@@ -62,7 +62,7 @@
         android:layout_height="50dp"
         android:layout_marginBottom="16dp"
         android:background="@android:color/transparent"
-        android:drawableLeft="@drawable/ic_leaf"
+        android:drawableLeft="@drawable/ic_pansy"
         android:drawablePadding="3dp"
         android:gravity="left|center_vertical"
         android:onClick="buttonPlantsClick"

@@ -9,14 +9,22 @@ public class Product {
     private int id;
     private String name;
     private String otherNames;
-    private int picture;
+    private String picture;
 
 
-    public Product(int id, String name, String otherNames, int picture) {
+    public Product(int id, String name, String otherNames, String picture) {
         this.id = id;
         this.name = name;
         this.otherNames = otherNames;
         this.picture = picture;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -35,21 +43,11 @@ public class Product {
         this.otherNames = otherNames;
     }
 
-    public int getId() {
-        return id;
-    }
-
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getPicture() {
+    public String getPicture() {
         return picture;
     }
 
-    public void setPicture(int picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
     }
-
 }

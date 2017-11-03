@@ -23,13 +23,10 @@
 
         <activity android:name=".Activity.SeasonsActivity" />
         <activity android:name=".Activity.FavoritesActivity" />
-        <activity android:name=".Activity.MushroomsActivity" />
 
         <activity
-            android:name=".Activity.BerriesActivity"
+            android:name=".Activity.ProductActivity"
             android:theme="@style/MyTheme"></activity>
-
-        <activity android:name=".Activity.PlantsActivity" />
 
         <activity
             android:name=".Activity.ScrollingActivity"

@@ -1,5 +1,7 @@
 package com.example.ixvar.mushroomhandbook.Adapter;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.widget.TextView;
 import com.example.ixvar.mushroomhandbook.R;
 import com.example.ixvar.mushroomhandbook.Model.Product;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -19,9 +23,11 @@ import java.util.List;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductVh> {
 
     private List<Product> products;
+    private Context mContext;
 
-    public ProductAdapter(List<Product> products){
+    public ProductAdapter(List<Product> products,Context mContext){
         this.products = products;
+        this.mContext = mContext;
     }
 
     @Override
@@ -37,7 +43,24 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         holder.mName.setText(product.getName());
         holder.mOtherNames.setText(product.getOtherNames());
-        holder.mPicture.setImageResource(product.getPicture());
+
+
+
+
+        try {
+            // получаем входной поток
+            InputStream ims = mContext.getAssets().open(product.getPicture());
+            // загружаем как Drawable
+            Drawable drawable = Drawable.createFromStream(ims, null);
+            // выводим картинку в ImageView
+            holder.mPicture.setImageDrawable(drawable);
+        }
+        catch(IOException ex) {
+            return;
+        }
+
+
+        //holder.mPicture.setImageResource(product.getPicture());
 
     }
 
@@ -54,8 +77,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         private TextView mOtherNames;
 
 
+
         public ProductVh(View itemView) {
             super(itemView);
+
 
             mName = (TextView) itemView.findViewById(R.id.textViewNameProduct);
             mOtherNames = (TextView) itemView.findViewById(R.id.textViewOtherNamesProducts);

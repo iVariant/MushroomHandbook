@@ -13,6 +13,8 @@ import com.example.ixvar.mushroomhandbook.R;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static String productType = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,17 +30,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void buttonMushroomsClick(View v){
-        startActivity(new Intent(this,MushroomsActivity.class));
+        productType = "Mushrooms";
+        startActivity(new Intent(this,ProductActivity.class));
     }
 
     public void buttonBerriesClick(View v){
-        startActivity(new Intent(this,BerriesActivity.class));
+        productType = "Berries";
+        startActivity(new Intent(this,ProductActivity.class));
     }
 
     public void buttonPlantsClick(View v){
-        startActivity(new Intent(this,PlantsActivity.class));
+        productType = "Plants";
+        startActivity(new Intent(this,ProductActivity.class));
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -15,7 +15,7 @@ import com.example.ixvar.mushroomhandbook.R;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "mushroom_handbook.db";
-    private static final int DATABASE_VERSION = 20;
+    private static final int DATABASE_VERSION = 22;
 
     //----------TABLES---------------------------
     public static final String TABLE_SEASONS = "seasons";
@@ -69,7 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String COLUMN_BERRIE_PICTURES_ID = "_id";
     public static final String COLUMN_BERRIE_PICTURES_ID_BERRIE = "id_berrie";
-    public static final String COLUMN_BERRIE_PICTURES_RES = "res";
+    public static final String COLUMN_BERRIE_PICTURES_URL = "url";
 
 
     public static final String COLUMN_BERRIES_ID = "_id";
@@ -160,7 +160,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + TABLE_BERRIE_PICTURES + " ("
                 + COLUMN_BERRIE_PICTURES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_BERRIE_PICTURES_ID_BERRIE + " INTEGER NOT NULL, "
-                + COLUMN_BERRIE_PICTURES_RES + " INTEGER NOT NULL, "
+                + COLUMN_BERRIE_PICTURES_URL + " TEXT NOT NULL, "
                 +"FOREIGN KEY("+ COLUMN_BERRIE_PICTURES_ID_BERRIE +") REFERENCES " + TABLE_BERRIES + "("+ COLUMN_BERRIES_ID +"));");
 
         db.execSQL("CREATE TABLE " + TABLE_ID_BERRIE__ID_SEASON + " ("
@@ -169,30 +169,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         insertBerrie(db,1,res.getString(R.string.berrie_name_wild_cherry),"ujdyj,fe,fef,12,",1,2,2, "fwefwe", "fwef2we",false);
-            insertBerriePicture(db,R.drawable.cherry1,1);
-        insertBerriePicture(db,R.drawable.cherry2,1);
-        insertBerriePicture(db,R.drawable.cherry2,1);
-        insertBerriePicture(db,R.drawable.cherry2,1);
-        insertBerriePicture(db,R.drawable.cherry2,1);
+            insertBerriePicture(db,"berries/cherry1.jpg",1);
+        insertBerriePicture(db, "berries/cherry2.jpg",1);
+        insertBerriePicture(db, "berries/cherry2.jpg",1);
+        insertBerriePicture(db, "berries/cherry1.jpg",1);
+        insertBerriePicture(db,"berries/cherry1.jpg",1);
+
+
 
         insertIDberrieIDSeason(db,1,6);
         insertIDberrieIDSeason(db,1,7);
 
 
         insertBerrie(db,2,res.getString(R.string.berrie_name_wolf_bast),"ujdyj,f4e,fef,12,",2,1,1, "ffefeef5555vvfe", "fwf232ef2we",false);
-        insertBerriePicture(db,R.drawable.cherry2,2);
-        insertBerriePicture(db,R.drawable.cherry2,2);
-        insertBerriePicture(db,R.drawable.cherry2,2);
-        insertBerriePicture(db,R.drawable.cherry2,2);
+        insertBerriePicture(db,"berries/header.jpg",2);
+        insertBerriePicture(db,"berries/cherry2.jpg",2);
+        insertBerriePicture(db,"berries/cherry2.jpg",2);
+        insertBerriePicture(db,"berries/cherry2.jpg",2);
 
         insertIDberrieIDSeason(db,2,3);
         insertIDberrieIDSeason(db,2,4);
 
         insertBerrie(db,3,res.getString(R.string.berrie_name_raven_eye),"ujdyj,1fe,fef,12,",2,3,4, "fwefw1!e", "fwef2wfef!!!!!e",false);
-        insertBerriePicture(db,R.drawable.cherry1,3);
-        insertBerriePicture(db,R.drawable.cherry1,3);
-        insertBerriePicture(db,R.drawable.cherry1,3);
-        insertBerriePicture(db,R.drawable.cherry1,3);
+        insertBerriePicture(db,"berries/cherry1.jpg",3);
+        insertBerriePicture(db,"berries/cherry1.jpg",3);
+        insertBerriePicture(db,"berries/cherry2.jpg",3);
+        insertBerriePicture(db,"berries/cherry1.jpg",3);
 
         insertIDberrieIDSeason(db,3,3);
 
@@ -269,10 +271,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    private static void insertBerriePicture(SQLiteDatabase db, int res, int idBerrie) {
+    private static void insertBerriePicture(SQLiteDatabase db, String url, int idBerrie) {
         ContentValues pictureValues = new ContentValues();
 
-        pictureValues.put(COLUMN_BERRIE_PICTURES_RES, res);
+        pictureValues.put(COLUMN_BERRIE_PICTURES_URL, url);
         pictureValues.put(COLUMN_BERRIE_PICTURES_ID_BERRIE, idBerrie);
 
         db.insert(TABLE_BERRIE_PICTURES, null, pictureValues);
