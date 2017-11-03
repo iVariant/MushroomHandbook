@@ -1,14 +1,18 @@
 package com.example.ixvar.mushroomhandbook.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.ixvar.mushroomhandbook.Activity.ScrollingActivity;
 import com.example.ixvar.mushroomhandbook.R;
 import com.example.ixvar.mushroomhandbook.Model.Product;
 
@@ -38,13 +42,22 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     @Override
-    public void onBindViewHolder(ProductVh holder, int position) {
+    public void onBindViewHolder(ProductVh holder, final int position) {
         Product product = products.get(position);
 
         holder.mName.setText(product.getName());
         holder.mOtherNames.setText(product.getOtherNames());
 
+        holder.mCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = v.getContext();
+                Intent intent = new Intent(context, ScrollingActivity.class);
+                intent.putExtra("id", products.get(position).getId());
+                context.startActivity(intent);
 
+            }
+        });
 
 
         try {
@@ -75,7 +88,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         private ImageView mPicture;
         private TextView mName;
         private TextView mOtherNames;
-
+        private CardView mCardView;
 
 
         public ProductVh(View itemView) {
@@ -85,6 +98,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             mName = (TextView) itemView.findViewById(R.id.textViewNameProduct);
             mOtherNames = (TextView) itemView.findViewById(R.id.textViewOtherNamesProducts);
             mPicture = (ImageView) itemView.findViewById(R.id.imageViewProduct);
+            mCardView = (CardView) itemView.findViewById(R.id.card_view);
 
         }
     }

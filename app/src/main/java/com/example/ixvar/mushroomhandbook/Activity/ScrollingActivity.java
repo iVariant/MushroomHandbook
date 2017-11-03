@@ -65,7 +65,7 @@ public class ScrollingActivity extends AppCompatActivity {
         mLinearLayout = (LinearLayout) findViewById(R.id.pagesContainer);
         List<Fragment> fragments = new ArrayList<>();
 
-        try {
+       /* try {
             db =  handbookDatabaseHelper.getReadableDatabase();
 
             userCursor =  db.rawQuery("select * from " + DatabaseHelper.TABLE_BERRIE_PICTURES , null); // тут
@@ -78,13 +78,13 @@ public class ScrollingActivity extends AppCompatActivity {
         } catch(SQLiteException e) {
             Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
             toast.show();
-        }
+        }*/
 
-
-      /* fragments.add(ContentFragment.newInstance(R.drawable.autumn));
+ //В пред добовить onResume для избежания ошибок
+        fragments.add(ContentFragment.newInstance(R.drawable.autumn));
         fragments.add(ContentFragment.newInstance(R.drawable.winter));
         fragments.add(ContentFragment.newInstance(R.drawable.summer));
-        fragments.add(ContentFragment.newInstance(R.drawable.spring));*/
+        fragments.add(ContentFragment.newInstance(R.drawable.spring));
 
         mAdapter = new CustomPagerAdapter2(getSupportFragmentManager(), fragments);
         mPager.setAdapter(mAdapter);

@@ -15,6 +15,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -52,8 +53,10 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
     private DatabaseHelper handbookDatabaseHelper;
 
     private ViewPager viewPager;
+    private TabLayout tabLayout;
+    private ViewPagerAdapter adapter;
+   // private ProductAdapter productAdapter;
 
-    //private String typeActivity;
 
 
     @Override
@@ -63,12 +66,8 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
 
         handbookDatabaseHelper = new DatabaseHelper(getApplicationContext());
 
-       // Intent intent = getIntent();
-        //typeActivity = intent.getStringExtra("activity_type");
-
 
         ImageView imageViewHeader = (ImageView) findViewById(R.id.htab_header);
-
 
         switch(MainActivity.productType) {
             case "Berries":
@@ -109,12 +108,14 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
         setupViewPager(viewPager);
 
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.htab_tabs);
+        /*TabLayout*/ tabLayout = (TabLayout) findViewById(R.id.htab_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
+
+
+
+
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.htab_collapse_toolbar);
-
-
 
         try {
             Bitmap bitmap = null;
@@ -155,6 +156,8 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
                     ContextCompat.getColor(this, R.color.colorPrimaryDark)
             );
         }
+
+
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -284,8 +287,10 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
 
         return seasons;
     }
-/*
-    List<Integer> getPicturesBerrie(int idBerrie)
+
+
+
+  /*  List<Integer> getPicturesBerrie(int idBerrie)
     {
         Cursor cursorPictures;
 
@@ -304,8 +309,8 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
         cursorPictures.close();
 
         return pictures;
-    }*/
-
+    }
+*/
     /*List<Berrie> getBerries(int idType)
     {
         Cursor cursor;
@@ -384,7 +389,7 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
     //=---------------------------------------
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        /*ViewPagerAdapter*/ adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
       try {
             db = handbookDatabaseHelper.getReadableDatabase();
@@ -414,17 +419,22 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
 
 
         viewPager.setAdapter(adapter);
+
     }
 
 
 
-    private static class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
+        private  final List<Fragment> mFragmentList = new ArrayList<>();
+        private  final List<String> mFragmentTitleList = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
+
+
+
+
 
         @Override
         public Fragment getItem(int position) {
@@ -436,10 +446,14 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
             return mFragmentList.size();
         }
 
+
+
+
         public void addFrag(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }
+
 
         @Override
         public CharSequence getPageTitle(int position) {
@@ -480,22 +494,10 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
 
 
 
-
-
             ProductAdapter adapter = new ProductAdapter(products,getContext());
             recyclerView.setAdapter(adapter);
 
-            /* List<Product> products;
-            products = new ArrayList<>();
 
-            ProductAdapter adapter = new ProductAdapter(products);
-            recyclerView.setAdapter(adapter);
-
-           products.add(new Product(1,"FirstName","Moloko,mamka,gg,Meow",R.drawable.header));
-            products.add(new Product(2,"SecondName","Moloko,mamka,gg,Meow",R.drawable.autumn));
-            products.add(new Product(3,"Seco5ndName","Mo,gg,Meow",R.drawable.spring));
-            products.add(new Product(4,"Second4Name","Moloko,mamka,gg,Meow",R.drawable.summer));
-            products.add(new Product(5,"SecondN4ame","gg,Meow",R.drawable.winter));*/
 
             return view;
         }
@@ -503,25 +505,53 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
     }
 
 
+    List<Product> getBerriesFilter(int idType,String newText) {
+        Cursor cursor;
+        List<Product> products;
+        products = new ArrayList<>();
 
+        cursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIES +
+                " WHERE " + handbookDatabaseHelper.COLUMN_BERRIES_TYPE + " = " + idType +
+                " and (" + handbookDatabaseHelper.COLUMN_BERRIES_NAME + " LIKE '%" + newText + "%' " +
+                        " or "+ handbookDatabaseHelper.COLUMN_BERRIES_OTHERNAMES + " LIKE '%" + newText + "%' ) "
+
+                , null);
+
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+
+            products.add(new Product(id,cursor.getString(1),cursor.getString(2),getPictureBerrie(id)));
+
+        }
+
+
+        cursor.close();
+
+        return products;
+
+
+    }
 
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-      /*  try {
+
+       // viewPager = (ViewPager) findViewById(R.id.htab_viewpager);
+
+
+
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        try {
             db = handbookDatabaseHelper.getReadableDatabase();
 
             switch(MainActivity.productType) {
-                case "Berries":;
-
-                    userCursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_NOTEBOOK +
-                            " WHERE " + handbookDatabaseHelper.NOTEBOOK_COLUMN_NOTE + " LIKE '%" + newText + "%' " +
-                            " or "+ handbookDatabaseHelper.NOTEBOOK_COLUMN_TITLE + " LIKE '%" + newText + "%' ", null);
-
+                case "Berries":
+                    userCursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIES_TYPE, null);
                     while (userCursor.moveToNext()) {
-                        adapter.addFrag(new DummyFragment( ContextCompat.getColor(this, R.color.bg_light_blue),getBerries(userCursor.getInt(0) ) ), userCursor.getString(1) );
+                        adapter.addFrag(new DummyFragment( ContextCompat.getColor(this, R.color.bg_light_blue),getBerriesFilter(userCursor.getInt(0),newText ) ), userCursor.getString(1) );
                     }
                     break;
                 case "Mushrooms":
@@ -532,16 +562,26 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
                     break;
             }
 
-
-
-
         } catch(SQLiteException e) {
             Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
             toast.show();
         }
 
 
-        viewPager.setAdapter(adapter);*/
+
+        viewPager.setAdapter(adapter);
+
+        //tabLayout = (TabLayout) findViewById(R.id.htab_tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+
+        Log.d("!!","-------~>      ");
+
+
+
+        int tabPosition = tabLayout.getSelectedTabPosition();
+
+
 
         return true;
     }
@@ -550,9 +590,6 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
     public boolean onQueryTextSubmit(String query) {
         return false;
     }
-
-
-
 
 
     @Override
