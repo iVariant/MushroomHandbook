@@ -1,6 +1,9 @@
 package com.example.ixvar.mushroomhandbook.Activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,11 +17,15 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ixvar.mushroomhandbook.ContentFragment;
@@ -40,16 +47,29 @@ public class ScrollingActivity extends AppCompatActivity {
     private Cursor userCursor;
     private DatabaseHelper handbookDatabaseHelper;
 
+    private String id;
+
+    TextView textViewProduct;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scrolling);
 
         handbookDatabaseHelper = new DatabaseHelper(getApplicationContext());
+        db =  handbookDatabaseHelper.getReadableDatabase();
+
+        Intent intent = getIntent();
+        id = intent.getStringExtra("id");
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        textViewProduct = (TextView) findViewById(R.id.content_text);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -65,23 +85,57 @@ public class ScrollingActivity extends AppCompatActivity {
         mLinearLayout = (LinearLayout) findViewById(R.id.pagesContainer);
         List<Fragment> fragments = new ArrayList<>();
 
-       /* try {
-            db =  handbookDatabaseHelper.getReadableDatabase();
 
-            userCursor =  db.rawQuery("select * from " + DatabaseHelper.TABLE_BERRIE_PICTURES , null); // тут
 
-            while (userCursor.moveToNext()) {
-                int pictureREs = userCursor.getInt(1);
-                fragments.add(ContentFragment.newInstance(pictureREs));
+        try {
+
+            switch(MainActivity.productType) {
+                case "Berries":
+
+                    userCursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIES +
+                            " WHERE " + handbookDatabaseHelper.COLUMN_BERRIES_ID + " = " + id , null);
+
+                    while (userCursor.moveToNext()) {
+                        setTitle(userCursor.getString(1));
+
+                        String text = "";
+
+                        text += getString(R.string.other_names);
+                        text += userCursor.getString(2);
+
+                        textViewProduct.setText(text);
+                    }
+
+
+
+
+
+
+
+                    break;
+                case "Mushrooms":
+
+                    break;
+                case "Plants":
+
+                    break;
             }
 
         } catch(SQLiteException e) {
             Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
             toast.show();
-        }*/
+        }
 
- //В пред добовить onResume для избежания ошибок
-        fragments.add(ContentFragment.newInstance(R.drawable.autumn));
+
+
+
+
+        //fragments = getPicturesBerrie();
+
+
+
+ // тут ссыоки на файлы
+       fragments.add(ContentFragment.newInstance(R.drawable.autumn));
         fragments.add(ContentFragment.newInstance(R.drawable.winter));
         fragments.add(ContentFragment.newInstance(R.drawable.summer));
         fragments.add(ContentFragment.newInstance(R.drawable.spring));
@@ -96,6 +150,28 @@ public class ScrollingActivity extends AppCompatActivity {
 
     }
 
+    List<Fragment> getPicturesBerrie()
+    {
+        Cursor cursorPictures;
+
+        List<Fragment> pictures;
+        pictures = new ArrayList<>();
+
+        cursorPictures =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIE_PICTURES +
+                " WHERE " + handbookDatabaseHelper.COLUMN_BERRIE_PICTURES_ID_BERRIE + " = " + id , null);
+
+        while (cursorPictures.moveToNext()) {
+            pictures.add(ContentFragment.newInstance(cursorPictures.getInt(2)));
+        }
+
+        cursorPictures.close();
+
+        return pictures;
+    }
+
+
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -103,6 +179,25 @@ public class ScrollingActivity extends AppCompatActivity {
         userCursor.close();
         db.close();
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+
+            case R.id.action_info:
+
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
 
     static class CustomPagerAdapter2 extends FragmentStatePagerAdapter {
 

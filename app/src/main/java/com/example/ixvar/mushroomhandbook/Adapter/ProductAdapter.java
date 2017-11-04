@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +54,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             public void onClick(View v) {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, ScrollingActivity.class);
-                intent.putExtra("id", products.get(position).getId());
+                intent.putExtra("id", Integer.toString(products.get(position).getId()));
                 context.startActivity(intent);
 
             }

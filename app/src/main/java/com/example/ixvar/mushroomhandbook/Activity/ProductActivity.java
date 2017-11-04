@@ -54,7 +54,7 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
-    private ViewPagerAdapter adapter;
+    private ViewPagerAdapter viewPagerAdapter;
    // private ProductAdapter productAdapter;
 
 
@@ -65,7 +65,7 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
         setContentView(R.layout.activity_bd_product);
 
         handbookDatabaseHelper = new DatabaseHelper(getApplicationContext());
-
+        db = handbookDatabaseHelper.getReadableDatabase();
 
         ImageView imageViewHeader = (ImageView) findViewById(R.id.htab_header);
 
@@ -104,11 +104,45 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-       /* final ViewPager*/ viewPager = (ViewPager) findViewById(R.id.htab_viewpager);
-        setupViewPager(viewPager);
+        viewPager = (ViewPager) findViewById(R.id.htab_viewpager);
+        tabLayout = (TabLayout) findViewById(R.id.htab_tabs);
+
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        try {
+
+            switch(MainActivity.productType) {
+                case "Berries":
+                    userCursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIES_TYPE, null);
+                    while (userCursor.moveToNext()) {
+                        viewPagerAdapter.addFrag(new DummyFragment( ContextCompat.getColor(this, R.color.bg_light_blue),getBerries(userCursor.getInt(0) ) ), userCursor.getString(1) );
+                    }
+                    break;
+                case "Mushrooms":
+
+                    break;
+                case "Plants":
+
+                    break;
+            }
 
 
-        /*TabLayout*/ tabLayout = (TabLayout) findViewById(R.id.htab_tabs);
+
+        } catch(SQLiteException e) {
+            Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
+
+
+        viewPager.setAdapter(viewPagerAdapter);
+
+
+
+
+
+
+
         tabLayout.setupWithViewPager(viewPager);
 
 
@@ -188,7 +222,6 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
 
 
 
-
     //=---------------------------------------
 
     String getColorBerrie(int idColor)
@@ -197,10 +230,10 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
         String color = "";
 
         cursorColor = db.query (handbookDatabaseHelper.TABLE_BERRIES_COLOR,
-                new String[] {handbookDatabaseHelper.COLUMN_BERRIES_COLOR_NAME},
-                "_id = ?",
-                new String[] {Integer.toString(idColor)},
-                null, null,null);
+            new String[] {handbookDatabaseHelper.COLUMN_BERRIES_COLOR_NAME},
+            "_id = ?",
+            new String[] {Integer.toString(idColor)},
+            null, null,null);
 
         if (cursorColor.moveToFirst()) {
             color = cursorColor.getString(0);
@@ -311,7 +344,8 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
         return pictures;
     }
 */
-    /*List<Berrie> getBerries(int idType)
+    /*
+    List<Berrie> getBerries(int idType)
     {
         Cursor cursor;
 
@@ -334,7 +368,8 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
         cursor.close();
 
         return berries;
-    }*/
+    }
+*/
 
     String getPictureBerrie(int idBerrie)
     {
@@ -388,50 +423,17 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
 
     //=---------------------------------------
 
-    private void setupViewPager(ViewPager viewPager) {
-        /*ViewPagerAdapter*/ adapter = new ViewPagerAdapter(getSupportFragmentManager());
-
-      try {
-            db = handbookDatabaseHelper.getReadableDatabase();
-
-          switch(MainActivity.productType) {
-              case "Berries":
-                  userCursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIES_TYPE, null);
-                  while (userCursor.moveToNext()) {
-                    adapter.addFrag(new DummyFragment( ContextCompat.getColor(this, R.color.bg_light_blue),getBerries(userCursor.getInt(0) ) ), userCursor.getString(1) );
-                  }
-                  break;
-              case "Mushrooms":
-
-                  break;
-              case "Plants":
-
-                  break;
-          }
 
 
 
-        } catch(SQLiteException e) {
-            Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
-            toast.show();
-        }
 
-
-
-        viewPager.setAdapter(adapter);
-
-    }
-
-
-
-    private class ViewPagerAdapter extends FragmentPagerAdapter {
-        private  final List<Fragment> mFragmentList = new ArrayList<>();
-        private  final List<String> mFragmentTitleList = new ArrayList<>();
+    private class ViewPagerAdapter extends FragmentStatePagerAdapter {
+        private  List<Fragment> mFragmentList = new ArrayList<>();
+        private  List<String> mFragmentTitleList = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
-
 
 
 
@@ -463,10 +465,16 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
 
 
 
-    public static class DummyFragment extends Fragment {
+
+
+
+    public static class  DummyFragment extends Fragment {
 
         int color;
         List<Product> products;
+
+
+
 
         public DummyFragment() {
         }
@@ -492,8 +500,6 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
 
 //------------------===============----------------------
 
-
-
             ProductAdapter adapter = new ProductAdapter(products,getContext());
             recyclerView.setAdapter(adapter);
 
@@ -501,6 +507,8 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
 
             return view;
         }
+
+
 
     }
 
@@ -512,7 +520,7 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
 
         cursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIES +
                 " WHERE " + handbookDatabaseHelper.COLUMN_BERRIES_TYPE + " = " + idType +
-                " and (" + handbookDatabaseHelper.COLUMN_BERRIES_NAME + " LIKE '%" + newText + "%' " +
+                " and ( " + handbookDatabaseHelper.COLUMN_BERRIES_NAME + " LIKE '%" + newText + "%' " +
                         " or "+ handbookDatabaseHelper.COLUMN_BERRIES_OTHERNAMES + " LIKE '%" + newText + "%' ) "
 
                 , null);
@@ -527,10 +535,7 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
 
 
         cursor.close();
-
         return products;
-
-
     }
 
 
@@ -538,20 +543,27 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
     public boolean onQueryTextChange(String newText) {
 
 
-       // viewPager = (ViewPager) findViewById(R.id.htab_viewpager);
+
+        int tabPosition = tabLayout.getSelectedTabPosition();
 
 
 
-        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+
+
+
+
+
 
         try {
-            db = handbookDatabaseHelper.getReadableDatabase();
+
 
             switch(MainActivity.productType) {
                 case "Berries":
                     userCursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIES_TYPE, null);
                     while (userCursor.moveToNext()) {
-                        adapter.addFrag(new DummyFragment( ContextCompat.getColor(this, R.color.bg_light_blue),getBerriesFilter(userCursor.getInt(0),newText ) ), userCursor.getString(1) );
+                        viewPagerAdapter.addFrag(new DummyFragment( ContextCompat.getColor(this, R.color.bg_light_blue),getBerriesFilter(userCursor.getInt(0),newText ) ), userCursor.getString(1) );
                     }
                     break;
                 case "Mushrooms":
@@ -568,18 +580,14 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
         }
 
 
+        viewPager.setAdapter(viewPagerAdapter);
 
-        viewPager.setAdapter(adapter);
-
-        //tabLayout = (TabLayout) findViewById(R.id.htab_tabs);
-        tabLayout.setupWithViewPager(viewPager);
-
-
-        Log.d("!!","-------~>      ");
+        tabLayout.getTabAt(tabPosition).select();
 
 
 
-        int tabPosition = tabLayout.getSelectedTabPosition();
+
+
 
 
 
