@@ -15,7 +15,6 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
 
-
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
@@ -29,8 +28,7 @@
                 android:id="@+id/framePictures"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="16dp"
-                >
+                android:paddingBottom="16dp">
 
                 <android.support.v4.view.ViewPager
                     android:id="@+id/pager"
@@ -65,10 +63,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorPrimaryDark"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:rippleColor="@color/colorPrimary"
-        app:srcCompat="@drawable/ic_favorite_black_24dp" />
+        app:rippleColor="@color/colorPrimary" />
+    <!--  app:srcCompat="@drawable/ic_favorite_black_24dp" -->
+
 
 </android.support.design.widget.CoordinatorLayout>

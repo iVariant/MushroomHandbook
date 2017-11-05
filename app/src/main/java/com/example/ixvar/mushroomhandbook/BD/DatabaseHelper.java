@@ -15,7 +15,7 @@ import com.example.ixvar.mushroomhandbook.R;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "mushroom_handbook.db";
-    private static final int DATABASE_VERSION = 26;
+    private static final int DATABASE_VERSION = 43;
 
     //----------TABLES---------------------------
     public static final String TABLE_SEASONS = "seasons";
@@ -170,7 +170,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         insertBerrie(db,1,res.getString(R.string.berrie_name_wild_cherry),res.getString(R.string.berrie_name_wild_cherry_other_names),
                 1,3,3,
-                res.getString(R.string.berrie_name_description), res.getString(R.string.berrie_name_wild_cherry_place),false);
+                res.getString(R.string.berrie_name_wild_cherry_description), res.getString(R.string.berrie_name_wild_cherry_place),false);
 
         insertBerriePicture(db,"berries/cherry1.jpg",1);
         insertBerriePicture(db, "berries/cherry2.jpg",1);
@@ -185,7 +185,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         insertBerrie(db,2,res.getString(R.string.berrie_name_raspberries),res.getString(R.string.berrie_name_raspberries_other_names),
                 1,2,3,
-                "fwe22fwe", res.getString(R.string.berrie_name_raspberries_place),false);
+                res.getString(R.string.berrie_name_raspberries_description), res.getString(R.string.berrie_name_raspberries_place),false);
 
         insertBerriePicture(db,"berries/raspberries1.jpg",2);
         insertBerriePicture(db, "berries/raspberries2.jpg",2);
@@ -198,27 +198,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         //----------------------------
 
-        insertBerrie(db,3,res.getString(R.string.berrie_name_wolf_bast),"ujdyj,f4e,fef,12,",2,1,1, "ffefeef5555vvfe", "fwf232ef2we",false);
-        insertBerriePicture(db,"berries/cherry2.jpg",2);
-        insertBerriePicture(db,"berries/cherry2.jpg",2);
-        insertBerriePicture(db,"berries/cherry2.jpg",2);
-        insertBerriePicture(db,"berries/cherry2.jpg",2);
+        insertBerrie(db,3,res.getString(R.string.berrie_name_wolf_bast),res.getString(R.string.berrie_name_wolf_bast_other_names),
+                2,1,1,
+                res.getString(R.string.berrie_name_wolf_bast_description),  res.getString(R.string.berrie_name_wolf_bast_place),false);
 
-        insertIDberrieIDSeason(db,3,3);
-        insertIDberrieIDSeason(db,3,4);
+        insertBerriePicture(db,"berries/wolf1.jpg",3);
+        insertBerriePicture(db,"berries/wolf2.jpg",3);
+        insertBerriePicture(db,"berries/wolf3.jpg",3);
+        insertBerriePicture(db,"berries/wolf4.jpg",3);
+
+        insertIDberrieIDSeason(db,3,7);
+        insertIDberrieIDSeason(db,3,8);
 
         //----------------------------
 
-        insertBerrie(db,4,res.getString(R.string.berrie_name_raven_eye),"ujdyj,1fe,fef,12,",2,3,4, "fwefw1!e", "fwef2wfef!!!!!e",false);
-        insertBerriePicture(db,"berries/cherry1.jpg",3);
-        insertBerriePicture(db,"berries/cherry1.jpg",3);
-        insertBerriePicture(db,"berries/cherry2.jpg",3);
-        insertBerriePicture(db,"berries/cherry1.jpg",3);
+        insertBerrie(db,4,res.getString(R.string.berrie_name_raven_eye),res.getString(R.string.berrie_name_raven_eye_other_names),
+                2,3,4,
+                res.getString(R.string.berrie_name_raven_eye_description) , res.getString(R.string.berrie_name_raven_eye_place),false);
 
-        insertIDberrieIDSeason(db,4,3);
+        insertBerriePicture(db,"berries/raven_eye1.jpg",4);
+        insertBerriePicture(db,"berries/raven_eye2.jpg",4);
+        insertBerriePicture(db,"berries/raven_eye3.jpg",4);
+        insertBerriePicture(db,"berries/raven_eye4.jpg",4);
 
-
-
+        insertIDberrieIDSeason(db,4,7);
+        insertIDberrieIDSeason(db,4,8);
 
     }
 

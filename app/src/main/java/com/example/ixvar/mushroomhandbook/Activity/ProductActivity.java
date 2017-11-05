@@ -139,10 +139,6 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
 
 
 
-
-
-
-
         tabLayout.setupWithViewPager(viewPager);
 
 
@@ -284,92 +280,7 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
         return size;
     }
 
-    String getSeasonsBerrie(int idBerrie)
-    {
-        Cursor cursorSeason;
-        List<Integer> idSeasons = new ArrayList<>();
 
-        String seasons = "";
-
-        cursorSeason = db.query (handbookDatabaseHelper.TABLE_ID_BERRIE__ID_SEASON,
-                new String[] {handbookDatabaseHelper.COLUMN_ID_SEASON},
-                "id_berrie = ?",
-                new String[] {Integer.toString(idBerrie)},
-                null, null,null);
-
-        while (cursorSeason.moveToNext()) {
-            idSeasons.add(cursorSeason.getInt(0));
-        }
-
-
-
-        for(Integer idSeason : idSeasons){
-            cursorSeason = db.query (handbookDatabaseHelper.TABLE_SEASONS,
-                    new String[] {handbookDatabaseHelper.COLUMN_SEASONS_NAME},
-                    "_id = ?",
-                    new String[] {Integer.toString(idSeason)},
-                    null, null,null);
-
-            if (cursorSeason.moveToFirst()) {
-                seasons += cursorSeason.getString(0) + " ";
-            }
-        }
-
-
-        cursorSeason.close();
-
-        return seasons;
-    }
-
-
-
-  /*  List<Integer> getPicturesBerrie(int idBerrie)
-    {
-        Cursor cursorPictures;
-
-        List<Integer> pictures;
-        pictures = new ArrayList<>();
-
-
-
-        cursorPictures =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIE_PICTURES + " WHERE " + handbookDatabaseHelper.COLUMN_BERRIE_PICTURES_ID_BERRIE + " = " + idBerrie , null);
-
-        while (cursorPictures.moveToNext()) {
-            pictures.add(cursorPictures.getInt(2));
-            //pictures[i++] = cursorPictures.getInt(2);
-        }
-
-        cursorPictures.close();
-
-        return pictures;
-    }
-*/
-    /*
-    List<Berrie> getBerries(int idType)
-    {
-        Cursor cursor;
-
-        berries = new ArrayList<>();
-
-        cursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIES + " WHERE " + handbookDatabaseHelper.COLUMN_BERRIES_TYPE + " = " + idType , null);
-
-
-        while (cursor.moveToNext()) {
-            int id = cursor.getInt(0);
-
-            berries.add(new Berrie(id,cursor.getString(1),cursor.getString(2),getPicturesBerrie(id),cursor.getString(3),getSizeBerrie(cursor.getInt(7)),getTypeBerrie(cursor.getInt(6)),
-                    getColorBerrie(cursor.getInt(8)),cursor.getString(4),getSeasonsBerrie(id),cursor.getInt(5) > 0));
-
-        }
-
-
-
-
-        cursor.close();
-
-        return berries;
-    }
-*/
 
     String getPictureBerrie(int idBerrie)
     {
@@ -511,6 +422,10 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
 
 
     }
+
+
+
+
 
 
     List<Product> getBerriesFilter(int idType,String newText) {
@@ -686,6 +601,10 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
 
     @Override
     protected void onDestroy() {
