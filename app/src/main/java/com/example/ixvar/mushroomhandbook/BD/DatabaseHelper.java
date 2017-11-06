@@ -15,26 +15,30 @@ import com.example.ixvar.mushroomhandbook.R;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "mushroom_handbook.db";
-    private static final int DATABASE_VERSION = 43;
+    private static final int DATABASE_VERSION = 57;
 
     //----------TABLES---------------------------
     public static final String TABLE_SEASONS = "seasons";
-    public static final String TABLE_BERRIE_PICTURES = "berrie_pictures";
+
 
     public static final String TABLE_ID_BERRIE__ID_SEASON = "id_berrie__id_season";
-
+    public static final String TABLE_ID_HERB__ID_SEASON = "id_herb__id_season";
+    public static final String TABLE_ID_MUSHROOM__ID_SEASON = "id_mushroom__id_season";
 
 
     public static final String TABLE_BERRIES = "berries";
     public static final String TABLE_BERRIES_SIZE = "berries_size";
     public static final String TABLE_BERRIES_TYPE = "berries_type";
     public static final String TABLE_BERRIES_COLOR = "berries_color";
+    public static final String TABLE_BERRIE_PICTURES = "berrie_pictures";
 
     public static final String TABLE_HERBS = "herbs";
     public static final String TABLE_HERBS_TYPE = "herbs_type";
     public static final String TABLE_HERBS_STEM_HEIGHT = "herbs_stem_height";
     public static final String TABLE_HERBS_FLOWERS_SIZE = "herbs_flowers_size";
     public static final String TABLE_HERBS_COLOR = "herbs_color";
+    public static final String TABLE_HERBS_PICTURES = "herbs_pictures";
+
 
     public static final String TABLE_MUSHROOMS = "mushrooms";
     public static final String TABLE_MUSHROOMS_TYPE = "mushrooms_type";
@@ -44,14 +48,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_MUSHROOMS_STIPE_HIGHT = "mushrooms_stipe_hight";
     public static final String TABLE_MUSHROOMS_STIPE_COLOR = "mushrooms_stipe_color";
     public static final String TABLE_MUSHROOMS_FLESH_COLOR = "mushrooms_flesh_color";
+    public static final String TABLE_MUSHROOMS_PICTURES = "mushrooms_pictures";
 
 
     //----------COLUMNS---------------------------
+    public static final String COLUMN_ID_HERB = "id_herb";
+    public static final String COLUMN_ID_MUSHROOM = "id_mushroom";
     public static final String COLUMN_ID_BERRIE = "id_berrie";
+
     public static final String COLUMN_ID_SEASON = "_id_season";
-
-
-
 
 
     public static final String COLUMN_SEASONS_ID = "_id";
@@ -82,6 +87,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_BERRIES_FAVORITE = "favorite";
     public static final String COLUMN_BERRIES_PLACE = "berries_place";
 
+      //---- HERBS-----
+
+    public static final String COLUMN_HERBS_TYPE_ID = "_id";
+    public static final String COLUMN_HERBS_TYPE_NAME = "name";
+
+    public static final String COLUMN_HERBS_PICTURES_ID = "_id";
+    public static final String COLUMN_HERBS_PICTURES_ID_HERB = "id_herb";
+    public static final String COLUMN_HERBS_PICTURES_URL = "url";
+
+
+    public static final String COLUMN_HERBS_FLOWERS_SIZE_ID = "_id";
+    public static final String COLUMN_HERBS_FLOWERS_SIZE_NAME = "size";
+
+
+    public static final String COLUMN_HERBS_COLOR_ID = "_id";
+    public static final String COLUMN_HERBS_COLOR_NAME = "color";
+
+    public static final String COLUMN_HERBS_STEM_HEIGHT_ID = "_id";
+    public static final String COLUMN_HERBS_STEM_HEIGHT_NAME = "stem_height";
+
+    public static final String COLUMN_HERBS_ID = "_id";
+    public static final String COLUMN_HERBS_NAME = "name";
+    public static final String COLUMN_HERBS_OTHERNAMES = "other_names";
+    public static final String COLUMN_HERBS_DESCRIPTION = "description";
+    public static final String COLUMN_HERBS_PLACE = "place";
+    public static final String COLUMN_HERBS_TYPE = "type";
+    public static final String COLUMN_HERBS_STEM_HEIGHT = "stem_height";
+    public static final String COLUMN_HERBS_FLOWERS_SIZE = "size";
+    public static final String COLUMN_HERBS_COLOR = "color";
+    public static final String COLUMN_HERBS_FAVORITE = "favorite";
+
     private Resources res;
 
 
@@ -104,25 +140,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_BERRIES_SIZE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_BERRIES_SIZE_NAME + " TEXT NOT NULL);");
 
-        insertBerriesSize(db,1, res.getString(R.string.berries_size_small));
-        insertBerriesSize(db,2, res.getString(R.string.berries_size_mid));
-        insertBerriesSize(db,3, res.getString(R.string.berries_size_big));
-
-
-
+        insertBerriesSize(db,1, res.getString(R.string.size_small));
+        insertBerriesSize(db,2, res.getString(R.string.size_mid));
+        insertBerriesSize(db,3, res.getString(R.string.size_big));
 
 
         db.execSQL("CREATE TABLE " + TABLE_BERRIES_COLOR + " ("
                 + COLUMN_BERRIES_COLOR_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_BERRIES_COLOR_NAME + " TEXT NOT NULL);");
 
-        insertBerriesColor(db,1, res.getString(R.string.berries_color_white));
-        insertBerriesColor(db,2, res.getString(R.string.berries_color_green));
-        insertBerriesColor(db,3, res.getString(R.string.berries_color_red));
-        insertBerriesColor(db,4, res.getString(R.string.berries_color_orange));
-        insertBerriesColor(db,5, res.getString(R.string.berries_color_pink));
-        insertBerriesColor(db,6, res.getString(R.string.berries_color_blue));
-        insertBerriesColor(db,7, res.getString(R.string.berries_color_black));
+        insertBerriesColor(db,1, res.getString(R.string.color_white));
+        insertBerriesColor(db,2, res.getString(R.string.color_green));
+        insertBerriesColor(db,3, res.getString(R.string.color_red));
+        insertBerriesColor(db,4, res.getString(R.string.color_orange));
+        insertBerriesColor(db,5, res.getString(R.string.color_pink));
+        insertBerriesColor(db,6, res.getString(R.string.color_blue));
+        insertBerriesColor(db,7, res.getString(R.string.color_black));
 
         db.execSQL("CREATE TABLE " + TABLE_SEASONS + " ("
                 + COLUMN_SEASONS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -166,6 +199,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + TABLE_ID_BERRIE__ID_SEASON + " ("
                 + COLUMN_ID_BERRIE + " INTEGER NOT NULL, "
                 + COLUMN_ID_SEASON + " INTEGER NOT NULL);");
+
+
+
+
+
+
 
 
         insertBerrie(db,1,res.getString(R.string.berrie_name_wild_cherry),res.getString(R.string.berrie_name_wild_cherry_other_names),
@@ -224,6 +263,144 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertIDberrieIDSeason(db,4,7);
         insertIDberrieIDSeason(db,4,8);
 
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~HERBS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+       db.execSQL("CREATE TABLE " + TABLE_HERBS_TYPE + " ("
+                + COLUMN_HERBS_TYPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_HERBS_TYPE_NAME + " TEXT NOT NULL);");
+
+        insertHerbsType(db,1, res.getString(R.string.herbs_type_useful));
+        insertHerbsType(db,2, res.getString(R.string.herbs_type_poison));
+
+
+        db.execSQL("CREATE TABLE " + TABLE_HERBS_STEM_HEIGHT + " ("
+                + COLUMN_HERBS_STEM_HEIGHT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_HERBS_STEM_HEIGHT_NAME + " TEXT NOT NULL);");
+
+        insertHerbsStemHeight(db,1, res.getString(R.string.size_small));
+        insertHerbsStemHeight(db,2, res.getString(R.string.size_mid));
+        insertHerbsStemHeight(db,3, res.getString(R.string.size_big));
+
+
+        db.execSQL("CREATE TABLE " + TABLE_HERBS_FLOWERS_SIZE + " ("
+                + COLUMN_HERBS_FLOWERS_SIZE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_HERBS_FLOWERS_SIZE_NAME + " TEXT NOT NULL);");
+
+
+        insertFlowersSize(db,1, res.getString(R.string.size_none));
+        insertFlowersSize(db,2, res.getString(R.string.size_small));
+        insertFlowersSize(db,3, res.getString(R.string.size_mid));
+        insertFlowersSize(db,4, res.getString(R.string.size_big));
+
+        db.execSQL("CREATE TABLE " + TABLE_HERBS_COLOR + " ("
+                + COLUMN_HERBS_COLOR_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_HERBS_COLOR_NAME + " TEXT NOT NULL);");
+
+
+        insertHerbsColor(db,1, res.getString(R.string.color_white));
+        insertHerbsColor(db,2, res.getString(R.string.color_yellow));
+        insertHerbsColor(db,3, res.getString(R.string.color_green));
+        insertHerbsColor(db,4, res.getString(R.string.color_red));
+        insertHerbsColor(db,5, res.getString(R.string.color_orange));
+        insertHerbsColor(db,6, res.getString(R.string.color_pink));
+        insertHerbsColor(db,7, res.getString(R.string.color_gray));
+        insertHerbsColor(db,8, res.getString(R.string.color_blue));
+        insertHerbsColor(db,9, res.getString(R.string.color_purple));
+
+      db.execSQL("CREATE TABLE " + TABLE_HERBS + " ("
+                + COLUMN_HERBS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_HERBS_NAME + " TEXT NOT NULL, "
+                + COLUMN_HERBS_OTHERNAMES + " TEXT NOT NULL, "
+                + COLUMN_HERBS_DESCRIPTION + " TEXT NOT NULL, "
+                + COLUMN_HERBS_PLACE + " TEXT NOT NULL, "
+                + COLUMN_HERBS_FAVORITE + " NUMERIC NOT NULL, "
+                + COLUMN_HERBS_TYPE + " INTEGER NOT NULL, "
+                + COLUMN_HERBS_FLOWERS_SIZE + " INTEGER NOT NULL, "
+                + COLUMN_HERBS_COLOR + " INTEGER NOT NULL, "
+                + COLUMN_HERBS_STEM_HEIGHT + " INTEGER NOT NULL, "
+                + "FOREIGN KEY("+ COLUMN_HERBS_FLOWERS_SIZE +") REFERENCES " + TABLE_HERBS_FLOWERS_SIZE + "("+ COLUMN_HERBS_FLOWERS_SIZE_ID +"), "
+                + "FOREIGN KEY("+ COLUMN_HERBS_COLOR +") REFERENCES " + TABLE_HERBS_COLOR+ "("+ COLUMN_HERBS_COLOR_ID +"), "
+                + "FOREIGN KEY("+ COLUMN_HERBS_STEM_HEIGHT +") REFERENCES " + TABLE_HERBS_STEM_HEIGHT + "("+ COLUMN_HERBS_STEM_HEIGHT_ID +"), "
+                + "FOREIGN KEY("+ COLUMN_HERBS_TYPE +") REFERENCES " + TABLE_HERBS_TYPE + "("+ COLUMN_HERBS_TYPE_ID +"));");
+
+
+        db.execSQL("CREATE TABLE " + TABLE_HERBS_PICTURES + " ("
+                + COLUMN_HERBS_PICTURES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_HERBS_PICTURES_ID_HERB + " INTEGER NOT NULL, "
+                + COLUMN_HERBS_PICTURES_URL + " TEXT NOT NULL, "
+                + "FOREIGN KEY("+ COLUMN_HERBS_PICTURES_ID_HERB +") REFERENCES " + TABLE_HERBS + "("+ COLUMN_HERBS_ID +"));");
+
+
+
+        db.execSQL("CREATE TABLE " + TABLE_ID_HERB__ID_SEASON + " ("
+                + COLUMN_ID_HERB + " INTEGER NOT NULL, "
+                + COLUMN_ID_SEASON + " INTEGER NOT NULL);");
+
+
+
+
+
+        insertHerb(db,1,res.getString(R.string.herbs_name_aloe),res.getString(R.string.herbs_name_aloe_other_names),
+                1,2,5,3,
+                res.getString(R.string.herbs_name_aloe_description) , res.getString(R.string.herbs_name_aloe_place),false);
+
+        insertIDherbIDSeason(db,1,1);
+        insertIDherbIDSeason(db,1,2);
+        insertIDherbIDSeason(db,1,3);
+        insertIDherbIDSeason(db,1,4);
+        insertIDherbIDSeason(db,1,5);
+        insertIDherbIDSeason(db,1,6);
+        insertIDherbIDSeason(db,1,7);
+        insertIDherbIDSeason(db,1,8);
+        insertIDherbIDSeason(db,1,9);
+        insertIDherbIDSeason(db,1,10);
+        insertIDherbIDSeason(db,1,11);
+        insertIDherbIDSeason(db,1,12);
+
+        insertHerbPicture(db,"herbs/aloe1.jpg",1);
+        insertHerbPicture(db,"herbs/aloe2.jpg",1);
+        insertHerbPicture(db,"herbs/aloe3.jpg",1);
+        insertHerbPicture(db,"herbs/aloe4.jpg",1);
+
+
+
+        insertHerb(db,2,res.getString(R.string.herbs_name_heracleum),res.getString(R.string.herbs_name_heracleum_other_names),
+                2,4,1,3,
+                res.getString(R.string.herbs_name_heracleum_description) , res.getString(R.string.herbs_name_heracleum_place),false);
+
+        insertIDherbIDSeason(db,2,6);
+        insertIDherbIDSeason(db,2,7);
+        insertIDherbIDSeason(db,2,8);
+        insertIDherbIDSeason(db,2,9);
+
+        insertHerbPicture(db,"herbs/heracleum1.jpg",2);
+        insertHerbPicture(db,"herbs/heracleum2.jpg",2);
+        insertHerbPicture(db,"herbs/heracleum3.jpg",2);
+        insertHerbPicture(db,"herbs/heracleum4.jpg",2);
+
+        // int sizeFlower, int color
+        insertHerb(db,3,res.getString(R.string.herbs_name_ambrosia),res.getString(R.string.herbs_name_ambrosia_other_names),
+                2,1,2,2,
+                res.getString(R.string.herbs_name_ambrosia_description) , res.getString(R.string.herbs_name_ambrosia_place),false);
+
+        insertIDherbIDSeason(db,3,6);
+        insertIDherbIDSeason(db,3,7);
+        insertIDherbIDSeason(db,3,8);
+        insertIDherbIDSeason(db,3,9);
+        insertIDherbIDSeason(db,3,10);
+
+        insertHerbPicture(db,"herbs/ambrosia1.jpg",3);
+        insertHerbPicture(db,"herbs/ambrosia2.jpg",3);
+        insertHerbPicture(db,"herbs/ambrosia3.jpg",3);
+        insertHerbPicture(db,"herbs/ambrosia4.jpg",3);
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~MUSHROOMS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     }
 
     @Override
@@ -248,6 +425,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_HERBS_FLOWERS_SIZE);
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_HERBS_COLOR);
 
+        db.execSQL("DROP TABLE IF EXISTS "+ TABLE_HERBS_PICTURES);
+
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_MUSHROOMS_TYPE);
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_MUSHROOMS_CAP_SIZE);
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_MUSHROOMS_CAP_COLOR);
@@ -255,6 +434,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_MUSHROOMS_STIPE_HIGHT);
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_MUSHROOMS_STIPE_COLOR);
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_MUSHROOMS_FLESH_COLOR);
+
+        db.execSQL("DROP TABLE IF EXISTS "+ TABLE_MUSHROOMS_PICTURES);
+        db.execSQL("DROP TABLE IF EXISTS "+ TABLE_ID_HERB__ID_SEASON);
 
 
         onCreate(db);
@@ -292,8 +474,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_SEASONS, null, seasonValues);
     }
 
-
-
     private static void insertBerriePicture(SQLiteDatabase db, String url, int idBerrie) {
         ContentValues pictureValues = new ContentValues();
 
@@ -325,5 +505,75 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.insert(TABLE_BERRIES, null, berrieValues);
     }
+
+    //-------------
+
+    private static void insertHerbsType(SQLiteDatabase db,int id, String type) {
+        ContentValues herbsTypeValues = new ContentValues();
+        herbsTypeValues.put(COLUMN_HERBS_TYPE_ID, id);
+        herbsTypeValues.put(COLUMN_HERBS_TYPE_NAME, type);
+
+        db.insert(TABLE_HERBS_TYPE, null, herbsTypeValues);
+    }
+
+    private static void insertHerbsStemHeight(SQLiteDatabase db,int id, String height) {
+        ContentValues herbsStemHeightValues = new ContentValues();
+        herbsStemHeightValues.put(COLUMN_HERBS_STEM_HEIGHT_ID, id);
+        herbsStemHeightValues.put(COLUMN_HERBS_STEM_HEIGHT_NAME, height);
+
+        db.insert(TABLE_HERBS_STEM_HEIGHT, null, herbsStemHeightValues);
+    }
+
+    private static void insertFlowersSize(SQLiteDatabase db,int id, String size) {
+        ContentValues flowersSizeValues = new ContentValues();
+        flowersSizeValues.put(COLUMN_HERBS_FLOWERS_SIZE_ID, id);
+        flowersSizeValues.put(COLUMN_HERBS_FLOWERS_SIZE_NAME, size);
+
+        db.insert(TABLE_HERBS_FLOWERS_SIZE, null, flowersSizeValues);
+    }
+
+    private static void insertHerbsColor(SQLiteDatabase db,int id, String color) {
+        ContentValues herbsColorValues = new ContentValues();
+        herbsColorValues.put(COLUMN_HERBS_COLOR_ID, id);
+        herbsColorValues.put(COLUMN_HERBS_COLOR_NAME, color);
+
+        db.insert(TABLE_HERBS_COLOR, null, herbsColorValues);
+    }
+
+
+    private static void insertHerbPicture(SQLiteDatabase db, String url, int idHerb) {
+        ContentValues pictureValues = new ContentValues();
+
+        pictureValues.put(COLUMN_HERBS_PICTURES_URL, url);
+        pictureValues.put(COLUMN_HERBS_PICTURES_ID_HERB, idHerb);
+
+        db.insert(TABLE_HERBS_PICTURES, null, pictureValues);
+    }
+
+    private static void insertIDherbIDSeason(SQLiteDatabase db,int idHerb, int idSeason) {
+        ContentValues idValues = new ContentValues();
+        idValues.put(COLUMN_ID_HERB, idHerb);
+        idValues.put(COLUMN_ID_SEASON, idSeason);
+
+        db.insert(TABLE_ID_HERB__ID_SEASON, null, idValues);
+    }
+
+    private static void insertHerb(SQLiteDatabase db,int id, String name,String otherNames,int type,int sizeFlower, int color, int steamHeight , String description, String place, boolean favorite) {
+        ContentValues berrieValues = new ContentValues();
+        berrieValues.put(COLUMN_HERBS_ID, id);
+        berrieValues.put(COLUMN_HERBS_NAME, name);
+        berrieValues.put(COLUMN_HERBS_OTHERNAMES, otherNames);
+        berrieValues.put(COLUMN_HERBS_TYPE, type);
+        berrieValues.put(COLUMN_HERBS_FLOWERS_SIZE, sizeFlower);
+        berrieValues.put(COLUMN_HERBS_COLOR, color);
+        berrieValues.put(COLUMN_HERBS_STEM_HEIGHT, steamHeight);
+        berrieValues.put(COLUMN_HERBS_DESCRIPTION, description);
+        berrieValues.put(COLUMN_HERBS_PLACE, place);
+        berrieValues.put(COLUMN_BERRIES_FAVORITE, favorite);
+
+        db.insert(TABLE_HERBS, null, berrieValues);
+    }
+
+    //-------------
 
 }

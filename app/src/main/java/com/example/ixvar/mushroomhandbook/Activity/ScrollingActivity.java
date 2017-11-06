@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ixvar.mushroomhandbook.ContentFragment;
+import com.example.ixvar.mushroomhandbook.Model.Product;
 import com.example.ixvar.mushroomhandbook.R;
 import com.example.ixvar.mushroomhandbook.BD.DatabaseHelper;
 
@@ -93,8 +94,13 @@ public class ScrollingActivity extends AppCompatActivity {
 
 
 
+        fragments = getPictures();
 
-        fragments = getPicturesBerrie();
+
+
+
+
+
 
 
         mAdapter = new CustomPagerAdapter2(getSupportFragmentManager(), fragments);
@@ -107,15 +113,30 @@ public class ScrollingActivity extends AppCompatActivity {
 
     }
 
-    List<Fragment> getPicturesBerrie()
+    List<Fragment> getPictures()
     {
-        Cursor cursorPictures;
+        Cursor cursorPictures = null;
 
         List<Fragment> pictures;
         pictures = new ArrayList<>();
 
-        cursorPictures =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIE_PICTURES +
-                " WHERE " + handbookDatabaseHelper.COLUMN_BERRIE_PICTURES_ID_BERRIE + " = " + id , null);
+
+        switch(MainActivity.productType) {
+            case "Berries":
+                cursorPictures =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIE_PICTURES +
+                        " WHERE " + handbookDatabaseHelper.COLUMN_BERRIE_PICTURES_ID_BERRIE + " = " + id , null);
+                break;
+
+            case "Mushrooms":
+
+                break;
+            case "Plants":
+                cursorPictures =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_HERBS_PICTURES +
+                        " WHERE " + handbookDatabaseHelper.COLUMN_HERBS_PICTURES_ID_HERB + " = " + id , null);
+                break;
+        }
+
+
 
         while (cursorPictures.moveToNext()) {
             pictures.add(ContentFragment.newInstance(cursorPictures.getString(2)));
@@ -126,17 +147,17 @@ public class ScrollingActivity extends AppCompatActivity {
         return pictures;
     }
 
-    String getSeasonsBerrie(int idBerrie)
+    String getSeasons(int idProduct,String table, String producTable)
     {
         Cursor cursorSeason;
         List<Integer> idSeasons = new ArrayList<>();
 
         String seasons = "";
 
-        cursorSeason = db.query (handbookDatabaseHelper.TABLE_ID_BERRIE__ID_SEASON,
+        cursorSeason = db.query (table,
                 new String[] {handbookDatabaseHelper.COLUMN_ID_SEASON},
-                "id_berrie = ?",
-                new String[] {Integer.toString(idBerrie)},
+                producTable + " = ?",
+                new String[] {Integer.toString(idProduct)},
                 null, null,null);
 
         while (cursorSeason.moveToNext()) {
@@ -153,15 +174,23 @@ public class ScrollingActivity extends AppCompatActivity {
                     null, null,null);
 
             if (cursorSeason.moveToFirst()) {
-                seasons += cursorSeason.getString(0) + " ";
+                seasons += cursorSeason.getString(0) + ", ";
             }
         }
 
+        seasons = seasons.substring(0, seasons.length()-2);
+
+        seasons += ".";
 
         cursorSeason.close();
 
         return seasons;
     }
+
+
+
+
+
 
     @Override
     protected void onResume() {
@@ -170,6 +199,10 @@ public class ScrollingActivity extends AppCompatActivity {
 
 
         try {
+
+            String text = "";
+            List<Integer> posList;
+            posList = new ArrayList<>();
 
             switch(MainActivity.productType) {
                 case "Berries":
@@ -189,9 +222,7 @@ public class ScrollingActivity extends AppCompatActivity {
                             fab.setImageResource(R.drawable.ic_star_false);
                         }
 
-                        String text = "";
-                        List<Integer> posList;
-                        posList = new ArrayList<>();
+
 
                         posList.add(text.length());
 
@@ -205,7 +236,7 @@ public class ScrollingActivity extends AppCompatActivity {
                         text += getString(R.string.seasons);
                         posList.add(text.length());
 
-                        text += getSeasonsBerrie(Integer.valueOf(id));
+                        text += getSeasons(Integer.valueOf(id),handbookDatabaseHelper.TABLE_ID_BERRIE__ID_SEASON,handbookDatabaseHelper.COLUMN_ID_BERRIE);
                         posList.add(text.length());
 
 
@@ -247,6 +278,66 @@ public class ScrollingActivity extends AppCompatActivity {
                     break;
                 case "Plants":
 
+
+                    userCursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_HERBS +
+                            " WHERE " + handbookDatabaseHelper.COLUMN_HERBS_ID + " = " + id , null);
+
+                    while (userCursor.moveToNext()) {
+                        setTitle(userCursor.getString(1));
+
+                        favorite = userCursor.getInt(5) > 0;
+
+                        if(favorite == true) {
+                            fab.setImageResource(R.drawable.ic_star_true);
+                        }
+                        else {
+                            fab.setImageResource(R.drawable.ic_star_false);
+                        }
+
+
+                        posList.add(text.length());
+
+
+                        text += getString(R.string.other_names);
+                        posList.add(text.length());
+
+                        text += userCursor.getString(2);
+                        posList.add(text.length());
+
+                        text += getString(R.string.seasons);
+                        posList.add(text.length());
+
+                        text += getSeasons(Integer.valueOf(id),handbookDatabaseHelper.TABLE_ID_HERB__ID_SEASON,handbookDatabaseHelper.COLUMN_ID_HERB);
+                        posList.add(text.length());
+
+
+                        text += getString(R.string.place);
+                        posList.add(text.length());
+
+                        text += userCursor.getString(4);
+                        posList.add(text.length());
+
+                        text += getString(R.string.description);
+                        posList.add(text.length());
+
+                        text += userCursor.getString(3);
+
+
+                        Spannable textSpannable = new SpannableString(text);
+
+
+
+                        for(int i = 0; i < posList.size()/2 ;i++)
+                        {
+                            textSpannable.setSpan(new StyleSpan(Typeface.BOLD),  posList.get(i*2),  posList.get(i*2+1), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+
+
+
+                        textViewProduct.setText(textSpannable);
+                    }
+
+
                     break;
             }
 
@@ -262,11 +353,11 @@ public class ScrollingActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 try {
+                    ContentValues cv = new ContentValues();
 
                     switch(MainActivity.productType) {
                         case "Berries":
 
-                            ContentValues cv = new ContentValues();
 
                             if(favorite == true) {
                                 cv.put(handbookDatabaseHelper.COLUMN_BERRIES_FAVORITE, false);
@@ -282,6 +373,16 @@ public class ScrollingActivity extends AppCompatActivity {
 
                             break;
                         case "Plants":
+
+
+                            if(favorite == true) {
+                                cv.put(handbookDatabaseHelper.COLUMN_HERBS_FAVORITE, false);
+                                db.update(handbookDatabaseHelper.TABLE_HERBS, cv, handbookDatabaseHelper.COLUMN_HERBS_ID + "=" + id, null);
+
+                            } else {
+                                cv.put(handbookDatabaseHelper.COLUMN_HERBS_FAVORITE, true);
+                                db.update(handbookDatabaseHelper.TABLE_HERBS, cv, handbookDatabaseHelper.COLUMN_HERBS_ID + "=" + id, null);
+                            }
 
                             break;
                     }

@@ -55,7 +55,6 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private ViewPagerAdapter viewPagerAdapter;
-   // private ProductAdapter productAdapter;
 
 
 
@@ -122,7 +121,10 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
 
                     break;
                 case "Plants":
-
+                    userCursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_HERBS_TYPE, null);
+                    while (userCursor.moveToNext()) {
+                        viewPagerAdapter.addFrag(new DummyFragment( ContextCompat.getColor(this, R.color.bg_light_blue),getHerbs(userCursor.getInt(0) ) ), userCursor.getString(1) );
+                    }
                     break;
             }
 
@@ -334,8 +336,45 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
 
     //=---------------------------------------
 
+    String getPictureHerb(int idHerb)
+    {
+        Cursor cursorPictures;
+        String picture = "";
+
+        cursorPictures = db.query (handbookDatabaseHelper.TABLE_HERBS_PICTURES,
+                new String[] {handbookDatabaseHelper.COLUMN_HERBS_PICTURES_URL},
+                "id_herb = ?",
+                new String[] {Integer.toString(idHerb)},
+                null, null,null);
+
+        if (cursorPictures.moveToFirst()) {
+            picture = cursorPictures.getString(0);
+        }
+
+        cursorPictures.close();
+        return picture;
+    }
+
+    List<Product> getHerbs(int idType)
+    {
+        Cursor cursor;
+        List<Product> products;
+        products = new ArrayList<>();
+
+        cursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_HERBS + " WHERE " + handbookDatabaseHelper.COLUMN_HERBS_TYPE + " = " + idType , null);
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+            products.add(new Product(id,cursor.getString(1),cursor.getString(2),getPictureHerb(id)));
+        }
 
 
+        cursor.close();
+
+        return products;
+    }
+
+    //==----------------------------
 
 
     private class ViewPagerAdapter extends FragmentStatePagerAdapter {
@@ -428,25 +467,52 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
 
 
 
-    List<Product> getBerriesFilter(int idType,String newText) {
-        Cursor cursor;
+    List<Product> getFilter(int idType,String newText) {
+        Cursor cursor = null;
         List<Product> products;
         products = new ArrayList<>();
 
-        cursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIES +
-                " WHERE " + handbookDatabaseHelper.COLUMN_BERRIES_TYPE + " = " + idType +
-                " and ( " + handbookDatabaseHelper.COLUMN_BERRIES_NAME + " LIKE '%" + newText + "%' " +
-                        " or "+ handbookDatabaseHelper.COLUMN_BERRIES_OTHERNAMES + " LIKE '%" + newText + "%' ) "
-
-                , null);
 
 
-        while (cursor.moveToNext()) {
-            int id = cursor.getInt(0);
 
-            products.add(new Product(id,cursor.getString(1),cursor.getString(2),getPictureBerrie(id)));
+        switch(MainActivity.productType) {
+            case "Berries":
+                cursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIES +
+                                " WHERE " + handbookDatabaseHelper.COLUMN_BERRIES_TYPE + " = " + idType +
+                                " and ( " + handbookDatabaseHelper.COLUMN_BERRIES_NAME + " LIKE '%" + newText + "%' " +
+                                " or "+ handbookDatabaseHelper.COLUMN_BERRIES_OTHERNAMES + " LIKE '%" + newText + "%' ) ", null);
 
+
+
+                while (cursor.moveToNext()) {
+                    int id = cursor.getInt(0);
+                    products.add(new Product(id,cursor.getString(1),cursor.getString(2),getPictureBerrie(id)));
+                }
+
+
+                break;
+
+            case "Mushrooms":
+
+                break;
+            case "Plants":
+                cursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_HERBS +
+                                " WHERE " + handbookDatabaseHelper.COLUMN_HERBS_TYPE + " = " + idType +
+                                " and ( " + handbookDatabaseHelper.COLUMN_HERBS_NAME + " LIKE '%" + newText + "%' " +
+                                " or "+ handbookDatabaseHelper.COLUMN_HERBS_OTHERNAMES + " LIKE '%" + newText + "%' ) ", null);
+
+
+                while (cursor.moveToNext()) {
+                    int id = cursor.getInt(0);
+                    products.add(new Product(id,cursor.getString(1),cursor.getString(2),getPictureHerb(id)));
+                }
+
+                break;
         }
+
+
+
+
 
 
         cursor.close();
@@ -458,17 +524,9 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
     public boolean onQueryTextChange(String newText) {
 
 
-
         int tabPosition = tabLayout.getSelectedTabPosition();
 
-
-
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-
-
-
-
-
 
 
         try {
@@ -478,14 +536,17 @@ public class ProductActivity extends AppCompatActivity implements SearchView.OnQ
                 case "Berries":
                     userCursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIES_TYPE, null);
                     while (userCursor.moveToNext()) {
-                        viewPagerAdapter.addFrag(new DummyFragment( ContextCompat.getColor(this, R.color.bg_light_blue),getBerriesFilter(userCursor.getInt(0),newText ) ), userCursor.getString(1) );
+                        viewPagerAdapter.addFrag(new DummyFragment( ContextCompat.getColor(this, R.color.bg_light_blue),getFilter(userCursor.getInt(0),newText ) ), userCursor.getString(1) );
                     }
                     break;
                 case "Mushrooms":
 
                     break;
                 case "Plants":
-
+                    userCursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_HERBS_TYPE, null);
+                    while (userCursor.moveToNext()) {
+                        viewPagerAdapter.addFrag(new DummyFragment( ContextCompat.getColor(this, R.color.bg_light_blue),getFilter(userCursor.getInt(0),newText ) ), userCursor.getString(1) );
+                    }
                     break;
             }
 
