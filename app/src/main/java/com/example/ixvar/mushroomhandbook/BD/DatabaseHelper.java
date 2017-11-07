@@ -15,7 +15,7 @@ import com.example.ixvar.mushroomhandbook.R;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "mushroom_handbook.db";
-    private static final int DATABASE_VERSION = 62;
+    private static final int DATABASE_VERSION = 71;
 
     //----------TABLES---------------------------
     public static final String TABLE_SEASONS = "seasons";
@@ -448,8 +448,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_MUSHROOMS_TYPE_NAME + " TEXT NOT NULL);");
 
         insertMushroomsType(db,1,res.getString(R.string.edible));
-        insertMushroomsType(db,2,res.getString(R.string.edible));
-        insertMushroomsType(db,3,res.getString(R.string.conditionally));
+        insertMushroomsType(db,2,res.getString(R.string.conditionally));
+        insertMushroomsType(db,3,res.getString(R.string.poison));
 
 
         db.execSQL("CREATE TABLE " + TABLE_MUSHROOMS_CAP_SIZE + " ("
@@ -590,6 +590,83 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertMushroomsPicture(db,"mushrooms/chanterelle2.jpg",1);
         insertMushroomsPicture(db,"mushrooms/chanterelle3.jpg",1);
         insertMushroomsPicture(db,"mushrooms/chanterelle4.jpg",1);
+
+
+
+        insertMushroom(db,2,res.getString(R.string.mushroom_name_white_mushrom_birch),res.getString(R.string.mushroom_name_white_mushrom_birch_other_names),
+                1,4,7,3,3,1,1,
+                res.getString(R.string.mushroom_name_white_mushrom_birch_description) , res.getString(R.string.mushroom_name_white_mushrom_birch_place),false);
+
+
+        insertIDmushroomIDSeason(db,2,7);
+        insertIDmushroomIDSeason(db,2,8);
+        insertIDmushroomIDSeason(db,2,9);
+        insertIDmushroomIDSeason(db,2,10);
+
+
+        insertMushroomsPicture(db,"mushrooms/white_mushrom_birch1.jpg",2);
+        insertMushroomsPicture(db,"mushrooms/white_mushrom_birch2.jpg",2);
+        insertMushroomsPicture(db,"mushrooms/white_mushrom_birch3.jpg",2);
+        insertMushroomsPicture(db,"mushrooms/white_mushrom_birch4.jpg",2);
+
+
+
+        insertMushroom(db,3,res.getString(R.string.mushroom_name_morcheck_high),res.getString(R.string.mushroom_name_morcheck_high_other_names),
+                2,2,3,2,3,5,1,
+                res.getString(R.string.mushroom_name_morcheck_high_description) , res.getString(R.string.mushroom_name_morcheck_high_place),false);
+
+
+        insertIDmushroomIDSeason(db,3,4);
+        insertIDmushroomIDSeason(db,3,5);
+        insertIDmushroomIDSeason(db,3,6);
+        insertIDmushroomIDSeason(db,3,7);
+        insertIDmushroomIDSeason(db,3,8);
+
+        insertMushroomsPicture(db,"mushrooms/morcheck_high1.jpg",3);
+        insertMushroomsPicture(db,"mushrooms/morcheck_high2.jpg",3);
+        insertMushroomsPicture(db,"mushrooms/morcheck_high3.jpg",3);
+        insertMushroomsPicture(db,"mushrooms/morcheck_high4.jpg",3);
+
+
+        insertMushroom(db,4,res.getString(R.string.mushroom_name_death_cap),res.getString(R.string.mushroom_name_morcheck_high_other_names),
+                3,4,7,3,3,1,1,
+                res.getString(R.string.mushroom_name_death_cap_description) , res.getString(R.string.mushroom_name_death_cap_place),false);
+
+
+
+        insertIDmushroomIDSeason(db,4,8);
+        insertIDmushroomIDSeason(db,4,9);
+
+        insertMushroomsPicture(db,"mushrooms/death_cap1.jpg",4);
+        insertMushroomsPicture(db,"mushrooms/death_cap2.jpg",4);
+        insertMushroomsPicture(db,"mushrooms/death_cap3.jpg",4);
+        insertMushroomsPicture(db,"mushrooms/death_cap4.jpg",4);
+
+
+        //,int type,int capSize, int capColor, int stipeThickness, int  stipeHeight, int stipeColor,int fleshColor,
+        insertMushroom(db,5,res.getString(R.string.mushroom_name_heterobasidion_annosum),res.getString(R.string.mushroom_name_heterobasidion_annosum_other_names),
+                3,2,3,1,1,1,1,
+                res.getString(R.string.mushroom_name_heterobasidion_annosum_description) , res.getString(R.string.mushroom_name_heterobasidion_annosum_place),false);
+
+
+
+        insertIDmushroomIDSeason(db,5,1);
+        insertIDmushroomIDSeason(db,5,2);
+        insertIDmushroomIDSeason(db,5,3);
+        insertIDmushroomIDSeason(db,5,4);
+        insertIDmushroomIDSeason(db,5,5);
+        insertIDmushroomIDSeason(db,5,6);
+        insertIDmushroomIDSeason(db,5,7);
+        insertIDmushroomIDSeason(db,5,8);
+        insertIDmushroomIDSeason(db,5,9);
+        insertIDmushroomIDSeason(db,5,10);
+        insertIDmushroomIDSeason(db,5,11);
+        insertIDmushroomIDSeason(db,5,12);
+
+        insertMushroomsPicture(db,"mushrooms/heterobasidion_annosum1.jpg",5);
+        insertMushroomsPicture(db,"mushrooms/heterobasidion_annosum2.jpg",5);
+        insertMushroomsPicture(db,"mushrooms/heterobasidion_annosum3.jpg",5);
+        insertMushroomsPicture(db,"mushrooms/heterobasidion_annosum4.jpg",5);
 
 
 

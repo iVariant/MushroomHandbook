@@ -100,7 +100,7 @@ public class FavoritesActivity extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(viewPager);
 
-
+        MainActivity.productType = "Berries";
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
