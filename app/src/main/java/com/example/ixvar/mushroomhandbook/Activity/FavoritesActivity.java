@@ -22,6 +22,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -79,14 +80,17 @@ public class FavoritesActivity extends AppCompatActivity {
  // тут изменить для каждой БД
 
         viewPagerAdapter.addFrag(new FavoritesActivity.DummyFragment(
-                ContextCompat.getColor(this, R.color.bg_light_blue),getBerries() ), getString(R.string.buttonBerries) );
+                ContextCompat.getColor(this, R.color.bg_light_blue),
+                getProducts(handbookDatabaseHelper.TABLE_BERRIES,handbookDatabaseHelper.COLUMN_BERRIES_FAVORITE) ), getString(R.string.buttonBerries) );
 
 
         viewPagerAdapter.addFrag(new FavoritesActivity.DummyFragment(
-                ContextCompat.getColor(this, R.color.bg_light_blue),getBerries() ), getString(R.string.buttonMushrooms) );
+                ContextCompat.getColor(this, R.color.bg_light_blue),
+                getProducts(handbookDatabaseHelper.TABLE_MUSHROOMS,handbookDatabaseHelper.COLUMN_MUSHROOMS_FAVORITE) ), getString(R.string.buttonMushrooms) );
 
         viewPagerAdapter.addFrag(new FavoritesActivity.DummyFragment(
-                ContextCompat.getColor(this, R.color.bg_light_blue),getBerries() ), getString(R.string.buttonPlants) );
+                ContextCompat.getColor(this, R.color.bg_light_blue),
+                getProducts(handbookDatabaseHelper.TABLE_HERBS,handbookDatabaseHelper.COLUMN_HERBS_FAVORITE) ), getString(R.string.buttonPlants) );
 
 
 
@@ -96,9 +100,41 @@ public class FavoritesActivity extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(viewPager);
 
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+
+                viewPager.setCurrentItem(tab.getPosition());
+
+                switch (tab.getPosition()) {
+                    case 0:
+                        MainActivity.productType = "Berries";
+                        break;
+                    case 1:
+                        MainActivity.productType = "Mushrooms";
+                        break;
+                    case 2:
+                        MainActivity.productType = "Plants";
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+
     }
 
-
+/*
     List<Product> getBerries()
     {
         Cursor cursor;
@@ -126,13 +162,7 @@ public class FavoritesActivity extends AppCompatActivity {
         Cursor cursorPictures;
         String picture = "";
 
-        /*cursorPictures =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIE_PICTURES +
-                " WHERE " + handbookDatabaseHelper.COLUMN_BERRIE_PICTURES_ID_BERRIE + " = " + idBerrie , null);
 
-        while (cursorPictures.moveToNext()) {
-            picture = cursorPictures.getInt(2);
-            break;
-        }*/
         cursorPictures = db.query (handbookDatabaseHelper.TABLE_BERRIE_PICTURES,
                 new String[] {handbookDatabaseHelper.COLUMN_BERRIE_PICTURES_URL},
                 "id_berrie = ?",
@@ -148,6 +178,73 @@ public class FavoritesActivity extends AppCompatActivity {
         cursorPictures.close();
         return picture;
     }
+
+*/
+
+    List<Product> getProducts(String table, String columnType)
+    {
+        Cursor cursor;
+        List<Product> products;
+        products = new ArrayList<>();
+
+        cursor =  db.rawQuery("select * from " + table + " WHERE " + columnType + " <> " + 0  , null);
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+            products.add(new Product(id,cursor.getString(1),cursor.getString(2),getPictureProduct(id,table)));
+        }
+
+        cursor.close();
+
+        return products;
+    }
+
+    String getPictureProduct(int idProduct,String typeTable)
+    {
+        Cursor cursorPictures = null;
+        String pictureURL = "";
+
+        switch(typeTable) {
+            case "berries":
+                cursorPictures = db.query (handbookDatabaseHelper.TABLE_BERRIE_PICTURES,
+                        new String[] {handbookDatabaseHelper.COLUMN_BERRIE_PICTURES_URL},
+                        handbookDatabaseHelper.COLUMN_BERRIE_PICTURES_ID_BERRIE + " = ?",
+                        new String[] {Integer.toString(idProduct)},
+                        null, null,null);
+                break;
+            case "mushrooms":
+                cursorPictures = db.query (handbookDatabaseHelper.TABLE_MUSHROOMS_PICTURES,
+                        new String[] {handbookDatabaseHelper.COLUMN_MUSHROOMS_PICTURES_URL},
+                        handbookDatabaseHelper.COLUMN_MUSHROOMS_PICTURES_ID_MUSHROOM + " = ?",
+                        new String[] {Integer.toString(idProduct)},
+                        null, null,null);
+                break;
+            case "herbs":
+                cursorPictures = db.query (handbookDatabaseHelper.TABLE_HERBS_PICTURES,
+                        new String[] {handbookDatabaseHelper.COLUMN_HERBS_PICTURES_URL},
+                        handbookDatabaseHelper.COLUMN_HERBS_PICTURES_ID_HERB + " = ?",
+                        new String[] {Integer.toString(idProduct)},
+                        null, null,null);
+                break;
+        }
+
+
+
+        if (cursorPictures.moveToFirst()) {
+            pictureURL = cursorPictures.getString(0);
+        }
+
+        cursorPictures.close();
+        return pictureURL;
+    }
+
+
+
+
+
+
+
+
 
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {

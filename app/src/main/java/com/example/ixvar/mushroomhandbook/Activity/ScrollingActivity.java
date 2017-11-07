@@ -85,14 +85,7 @@ public class ScrollingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-
-
-
-
-
         List<Fragment> fragments = new ArrayList<>();
-
-
 
         fragments = getPictures();
 
@@ -128,7 +121,8 @@ public class ScrollingActivity extends AppCompatActivity {
                 break;
 
             case "Mushrooms":
-
+                cursorPictures =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_MUSHROOMS_PICTURES +
+                        " WHERE " + handbookDatabaseHelper.COLUMN_MUSHROOMS_PICTURES_ID_MUSHROOM + " = " + id , null);
                 break;
             case "Plants":
                 cursorPictures =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_HERBS_PICTURES +
@@ -201,8 +195,10 @@ public class ScrollingActivity extends AppCompatActivity {
         try {
 
             String text = "";
+            String seasons = "";
             List<Integer> posList;
             posList = new ArrayList<>();
+
 
             switch(MainActivity.productType) {
                 case "Berries":
@@ -210,70 +206,19 @@ public class ScrollingActivity extends AppCompatActivity {
                     userCursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_BERRIES +
                             " WHERE " + handbookDatabaseHelper.COLUMN_BERRIES_ID + " = " + id , null);
 
-                    while (userCursor.moveToNext()) {
-                        setTitle(userCursor.getString(1));
-
-                        favorite = userCursor.getInt(5) > 0;
-
-                        if(favorite == true) {
-                            fab.setImageResource(R.drawable.ic_star_true);
-                        }
-                        else {
-                            fab.setImageResource(R.drawable.ic_star_false);
-                        }
-
-
-
-                        posList.add(text.length());
-
-
-                        text += getString(R.string.other_names);
-                        posList.add(text.length());
-
-                        text += userCursor.getString(2);
-                        posList.add(text.length());
-
-                        text += getString(R.string.seasons);
-                        posList.add(text.length());
-
-                        text += getSeasons(Integer.valueOf(id),handbookDatabaseHelper.TABLE_ID_BERRIE__ID_SEASON,handbookDatabaseHelper.COLUMN_ID_BERRIE);
-                        posList.add(text.length());
-
-
-                        text += getString(R.string.place);
-                        posList.add(text.length());
-
-                        text += userCursor.getString(4);
-                        posList.add(text.length());
-
-                        text += getString(R.string.description);
-                        posList.add(text.length());
-
-                        text += userCursor.getString(3);
-
-
-                        Spannable textSpannable = new SpannableString(text);
-
-
-
-                        for(int i = 0; i < posList.size()/2 ;i++)
-                        {
-                            textSpannable.setSpan(new StyleSpan(Typeface.BOLD),  posList.get(i*2),  posList.get(i*2+1), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        }
-
-
-
-                        textViewProduct.setText(textSpannable);
-                    }
-
-
-
-
+                    seasons = getSeasons(Integer.valueOf(id),handbookDatabaseHelper.TABLE_ID_BERRIE__ID_SEASON,handbookDatabaseHelper.COLUMN_ID_BERRIE);
 
 
 
                     break;
                 case "Mushrooms":
+
+
+                    userCursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_MUSHROOMS +
+                            " WHERE " + handbookDatabaseHelper.COLUMN_MUSHROOMS_ID + " = " + id , null);
+
+                    seasons = getSeasons(Integer.valueOf(id),handbookDatabaseHelper.TABLE_ID_MUSHROOM__ID_SEASON,handbookDatabaseHelper.COLUMN_ID_MUSHROOM);
+
 
                     break;
                 case "Plants":
@@ -282,64 +227,70 @@ public class ScrollingActivity extends AppCompatActivity {
                     userCursor =  db.rawQuery("select * from " + handbookDatabaseHelper.TABLE_HERBS +
                             " WHERE " + handbookDatabaseHelper.COLUMN_HERBS_ID + " = " + id , null);
 
-                    while (userCursor.moveToNext()) {
-                        setTitle(userCursor.getString(1));
-
-                        favorite = userCursor.getInt(5) > 0;
-
-                        if(favorite == true) {
-                            fab.setImageResource(R.drawable.ic_star_true);
-                        }
-                        else {
-                            fab.setImageResource(R.drawable.ic_star_false);
-                        }
+                    seasons = getSeasons(Integer.valueOf(id),handbookDatabaseHelper.TABLE_ID_HERB__ID_SEASON,handbookDatabaseHelper.COLUMN_ID_HERB);
 
 
-                        posList.add(text.length());
-
-
-                        text += getString(R.string.other_names);
-                        posList.add(text.length());
-
-                        text += userCursor.getString(2);
-                        posList.add(text.length());
-
-                        text += getString(R.string.seasons);
-                        posList.add(text.length());
-
-                        text += getSeasons(Integer.valueOf(id),handbookDatabaseHelper.TABLE_ID_HERB__ID_SEASON,handbookDatabaseHelper.COLUMN_ID_HERB);
-                        posList.add(text.length());
-
-
-                        text += getString(R.string.place);
-                        posList.add(text.length());
-
-                        text += userCursor.getString(4);
-                        posList.add(text.length());
-
-                        text += getString(R.string.description);
-                        posList.add(text.length());
-
-                        text += userCursor.getString(3);
-
-
-                        Spannable textSpannable = new SpannableString(text);
-
-
-
-                        for(int i = 0; i < posList.size()/2 ;i++)
-                        {
-                            textSpannable.setSpan(new StyleSpan(Typeface.BOLD),  posList.get(i*2),  posList.get(i*2+1), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        }
-
-
-
-                        textViewProduct.setText(textSpannable);
-                    }
 
 
                     break;
             }
+
+
+            while (userCursor.moveToNext()) {
+                setTitle(userCursor.getString(1));
+
+                favorite = userCursor.getInt(5) > 0;
+
+                if(favorite == true) {
+                    fab.setImageResource(R.drawable.ic_star_true);
+                }
+                else {
+                    fab.setImageResource(R.drawable.ic_star_false);
+                }
+
+
+                posList.add(text.length());
+
+
+                text += getString(R.string.other_names);
+                posList.add(text.length());
+
+                text += userCursor.getString(2);
+                posList.add(text.length());
+
+                text += getString(R.string.seasons);
+                posList.add(text.length());
+
+                text += seasons;
+                posList.add(text.length());
+
+
+                text += getString(R.string.place);
+                posList.add(text.length());
+
+                text += userCursor.getString(4);
+                posList.add(text.length());
+
+                text += getString(R.string.description);
+                posList.add(text.length());
+
+                text += userCursor.getString(3);
+
+
+                Spannable textSpannable = new SpannableString(text);
+
+
+
+                for(int i = 0; i < posList.size()/2 ;i++)
+                {
+                    textSpannable.setSpan(new StyleSpan(Typeface.BOLD),  posList.get(i*2),  posList.get(i*2+1), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+
+
+
+                textViewProduct.setText(textSpannable);
+            }
+
 
         } catch(SQLiteException e) {
             Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
@@ -370,7 +321,14 @@ public class ScrollingActivity extends AppCompatActivity {
 
                             break;
                         case "Mushrooms":
+                            if(favorite == true) {
+                                cv.put(handbookDatabaseHelper.COLUMN_MUSHROOMS_FAVORITE, false);
+                                db.update(handbookDatabaseHelper.TABLE_MUSHROOMS, cv, handbookDatabaseHelper.COLUMN_MUSHROOMS_ID + "=" + id, null);
 
+                            } else {
+                                cv.put(handbookDatabaseHelper.COLUMN_MUSHROOMS_FAVORITE, true);
+                                db.update(handbookDatabaseHelper.TABLE_MUSHROOMS, cv, handbookDatabaseHelper.COLUMN_MUSHROOMS_ID + "=" + id, null);
+                            }
                             break;
                         case "Plants":
 

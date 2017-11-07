@@ -15,7 +15,7 @@ import com.example.ixvar.mushroomhandbook.R;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "mushroom_handbook.db";
-    private static final int DATABASE_VERSION = 57;
+    private static final int DATABASE_VERSION = 62;
 
     //----------TABLES---------------------------
     public static final String TABLE_SEASONS = "seasons";
@@ -118,6 +118,52 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_HERBS_COLOR = "color";
     public static final String COLUMN_HERBS_FAVORITE = "favorite";
 
+    //---- MUSHROOMS-----
+    public static final String COLUMN_MUSHROOMS_TYPE_ID = "_id";
+    public static final String COLUMN_MUSHROOMS_TYPE_NAME = "name";
+
+
+    public static final String COLUMN_MUSHROOMS_CAP_SIZE_ID = "_id";
+    public static final String COLUMN_MUSHROOMS_CAP_SIZE_NAME = "size";
+
+    public static final String COLUMN_MUSHROOMS_CAP_COLOR_ID = "_id";
+    public static final String COLUMN_MUSHROOMS_CAP_COLOR_NAME = "color";
+
+    public static final String COLUMN_MUSHROOMS_STIPE_THICKNESS_ID = "_id";
+    public static final String COLUMN_MUSHROOMS_STIPE_THICKNESS_NAME = "name";
+
+
+    public static final String COLUMN_MUSHROOMS_STIPE_HIGHT_ID = "_id";
+    public static final String COLUMN_MUSHROOMS_STIPE_HIGHT_NAME = "name";
+
+    public static final String COLUMN_MUSHROOMS_STIPE_COLOR_ID = "_id";
+    public static final String COLUMN_MUSHROOMS_STIPE_COLOR_NAME = "name";
+
+
+    public static final String COLUMN_MUSHROOMS_FLESH_COLOR_ID = "_id";
+    public static final String COLUMN_MUSHROOMS_FLESH_COLOR_NAME = "name";
+
+
+    public static final String COLUMN_MUSHROOMS_ID = "_id";
+    public static final String COLUMN_MUSHROOMS_NAME = "name";
+    public static final String COLUMN_MUSHROOMS_OTHERNAMES = "other_names";
+    public static final String COLUMN_MUSHROOMS_DESCRIPTION = "description";
+    public static final String COLUMN_MUSHROOMS_PLACE = "place";
+    public static final String COLUMN_MUSHROOMS_TYPE = "type";
+    public static final String COLUMN_MUSHROOMS_FAVORITE = "favorite";
+    public static final String COLUMN_MUSHROOMS_CAP_SIZE = "cap_size";
+    public static final String COLUMN_MUSHROOMS_CAP_COLOR = "cap_color";
+    public static final String COLUMN_MUSHROOMS_STIPE_THICKNESS = "stipe_thickness";
+    public static final String COLUMN_MUSHROOMS_STIPE_HIGHT = "stipe_height";
+    public static final String COLUMN_MUSHROOMS_STIPE_COLOR = "stipe_color";
+    public static final String COLUMN_MUSHROOMS_FLESH_COLOR = "fresh_color";
+
+    public static final String COLUMN_MUSHROOMS_PICTURES_ID = "_id";
+    public static final String COLUMN_MUSHROOMS_PICTURES_ID_MUSHROOM = "id_mushroom";
+    public static final String COLUMN_MUSHROOMS_PICTURES_URL = "url";
+
+
+
     private Resources res;
 
 
@@ -133,10 +179,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_BERRIES_TYPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_BERRIES_TYPE_NAME + " TEXT NOT NULL);");
 
-        insertBerriesType(db,1, res.getString(R.string.berries_type_edible));
-        insertBerriesType(db,2, res.getString(R.string.berries_type_inedible));
+        insertBerriesType(db,1, res.getString(R.string.edible));
+        insertBerriesType(db,2, res.getString(R.string.inedible));
 
-       db.execSQL("CREATE TABLE " + TABLE_BERRIES_SIZE + " ("
+        db.execSQL("CREATE TABLE " + TABLE_BERRIES_SIZE + " ("
                 + COLUMN_BERRIES_SIZE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_BERRIES_SIZE_NAME + " TEXT NOT NULL);");
 
@@ -203,10 +249,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-
-
-
-
         insertBerrie(db,1,res.getString(R.string.berrie_name_wild_cherry),res.getString(R.string.berrie_name_wild_cherry_other_names),
                 1,3,3,
                 res.getString(R.string.berrie_name_wild_cherry_description), res.getString(R.string.berrie_name_wild_cherry_place),false);
@@ -268,12 +310,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //~~~~~~~~~~~~~~~~~~~~~~~~~~HERBS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-       db.execSQL("CREATE TABLE " + TABLE_HERBS_TYPE + " ("
+        db.execSQL("CREATE TABLE " + TABLE_HERBS_TYPE + " ("
                 + COLUMN_HERBS_TYPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_HERBS_TYPE_NAME + " TEXT NOT NULL);");
 
-        insertHerbsType(db,1, res.getString(R.string.herbs_type_useful));
-        insertHerbsType(db,2, res.getString(R.string.herbs_type_poison));
+        insertHerbsType(db,1, res.getString(R.string.useful));
+        insertHerbsType(db,2, res.getString(R.string.poison));
 
 
         db.execSQL("CREATE TABLE " + TABLE_HERBS_STEM_HEIGHT + " ("
@@ -310,7 +352,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertHerbsColor(db,8, res.getString(R.string.color_blue));
         insertHerbsColor(db,9, res.getString(R.string.color_purple));
 
-      db.execSQL("CREATE TABLE " + TABLE_HERBS + " ("
+        db.execSQL("CREATE TABLE " + TABLE_HERBS + " ("
                 + COLUMN_HERBS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_HERBS_NAME + " TEXT NOT NULL, "
                 + COLUMN_HERBS_OTHERNAMES + " TEXT NOT NULL, "
@@ -401,6 +443,156 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //~~~~~~~~~~~~~~~~~~~~~~~~~~MUSHROOMS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+        db.execSQL("CREATE TABLE " + TABLE_MUSHROOMS_TYPE + " ("
+                + COLUMN_MUSHROOMS_TYPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_MUSHROOMS_TYPE_NAME + " TEXT NOT NULL);");
+
+        insertMushroomsType(db,1,res.getString(R.string.edible));
+        insertMushroomsType(db,2,res.getString(R.string.edible));
+        insertMushroomsType(db,3,res.getString(R.string.conditionally));
+
+
+        db.execSQL("CREATE TABLE " + TABLE_MUSHROOMS_CAP_SIZE + " ("
+                + COLUMN_MUSHROOMS_CAP_SIZE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_MUSHROOMS_CAP_SIZE_NAME + " TEXT NOT NULL);");
+
+        insertCapSize(db,1,res.getString(R.string.size_none));
+        insertCapSize(db,2,res.getString(R.string.size_small));
+        insertCapSize(db,3,res.getString(R.string.size_mid));
+        insertCapSize(db,4,res.getString(R.string.size_big));
+
+
+        db.execSQL("CREATE TABLE " + TABLE_MUSHROOMS_CAP_COLOR + " ("
+                + COLUMN_MUSHROOMS_CAP_COLOR_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_MUSHROOMS_CAP_COLOR_NAME + " TEXT NOT NULL);");
+
+
+        insertCapColor(db,1,res.getString(R.string.color_white));
+        insertCapColor(db,2,res.getString(R.string.color_brown_light));
+        insertCapColor(db,3,res.getString(R.string.color_brown_dark));
+        insertCapColor(db,4,res.getString(R.string.color_yellow));
+        insertCapColor(db,5,res.getString(R.string.color_brown));
+        insertCapColor(db,6,res.getString(R.string.color_red));
+        insertCapColor(db,7,res.getString(R.string.color_cream));
+        insertCapColor(db,8,res.getString(R.string.color_orange));
+        insertCapColor(db,9,res.getString(R.string.color_pink));
+        insertCapColor(db,10,res.getString(R.string.color_gray));
+        insertCapColor(db,11,res.getString(R.string.color_blue));
+        insertCapColor(db,12,res.getString(R.string.color_purple));
+        insertCapColor(db,13,res.getString(R.string.color_black));
+
+
+
+        db.execSQL("CREATE TABLE " + TABLE_MUSHROOMS_STIPE_THICKNESS + " ("
+                + COLUMN_MUSHROOMS_STIPE_THICKNESS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_MUSHROOMS_STIPE_THICKNESS_NAME + " TEXT NOT NULL);");
+
+        insertStipeThickness(db,1,res.getString(R.string.size_none));
+        insertStipeThickness(db,2,res.getString(R.string.size_small));
+        insertStipeThickness(db,3,res.getString(R.string.size_mid));
+        insertStipeThickness(db,4,res.getString(R.string.size_big));
+
+        db.execSQL("CREATE TABLE " + TABLE_MUSHROOMS_STIPE_HIGHT + " ("
+                + COLUMN_MUSHROOMS_STIPE_HIGHT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_MUSHROOMS_STIPE_HIGHT_NAME + " TEXT NOT NULL);");
+
+        insertStipeHeight(db,1,res.getString(R.string.size_none));
+        insertStipeHeight(db,2,res.getString(R.string.size_small));
+        insertStipeHeight(db,3,res.getString(R.string.size_mid));
+        insertStipeHeight(db,4,res.getString(R.string.size_big));
+
+
+        db.execSQL("CREATE TABLE " + TABLE_MUSHROOMS_STIPE_COLOR + " ("
+                + COLUMN_MUSHROOMS_STIPE_COLOR_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_MUSHROOMS_STIPE_COLOR_NAME + " TEXT NOT NULL);");
+
+        insertStipeColor(db,1,res.getString(R.string.color_white));
+        insertStipeColor(db,2,res.getString(R.string.color_brown_light));
+        insertStipeColor(db,3,res.getString(R.string.color_brown_dark));
+        insertStipeColor(db,4,res.getString(R.string.color_yellow));
+        insertStipeColor(db,5,res.getString(R.string.color_brown));
+        insertStipeColor(db,6,res.getString(R.string.color_red));
+        insertStipeColor(db,7,res.getString(R.string.color_cream));
+        insertStipeColor(db,8,res.getString(R.string.color_orange));
+        insertStipeColor(db,9,res.getString(R.string.color_pink));
+        insertStipeColor(db,10,res.getString(R.string.color_gray));
+        insertStipeColor(db,11,res.getString(R.string.color_blue));
+        insertStipeColor(db,12,res.getString(R.string.color_purple));
+        insertStipeColor(db,13,res.getString(R.string.color_black));
+
+        db.execSQL("CREATE TABLE " + TABLE_MUSHROOMS_FLESH_COLOR + " ("
+                + COLUMN_MUSHROOMS_FLESH_COLOR_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_MUSHROOMS_FLESH_COLOR_NAME + " TEXT NOT NULL);");
+
+        insertFleshColor(db,1,res.getString(R.string.color_white));
+        insertFleshColor(db,2,res.getString(R.string.color_brown_dark));
+        insertFleshColor(db,3,res.getString(R.string.color_yellow));
+        insertFleshColor(db,4,res.getString(R.string.color_brown));
+        insertFleshColor(db,5,res.getString(R.string.color_red));
+        insertFleshColor(db,6,res.getString(R.string.color_cream));
+        insertFleshColor(db,7,res.getString(R.string.color_orange));
+        insertFleshColor(db,8,res.getString(R.string.color_pink));
+        insertFleshColor(db,9,res.getString(R.string.color_gray));
+        insertFleshColor(db,10,res.getString(R.string.color_blue));
+        insertFleshColor(db,11,res.getString(R.string.color_purple));
+        insertFleshColor(db,12,res.getString(R.string.color_black));
+
+
+
+        db.execSQL("CREATE TABLE " + TABLE_MUSHROOMS + " ("
+                + COLUMN_MUSHROOMS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_MUSHROOMS_NAME + " TEXT NOT NULL, "
+                + COLUMN_MUSHROOMS_OTHERNAMES + " TEXT NOT NULL, "
+                + COLUMN_MUSHROOMS_DESCRIPTION + " TEXT NOT NULL, "
+                + COLUMN_MUSHROOMS_PLACE + " TEXT NOT NULL, "
+                + COLUMN_MUSHROOMS_FAVORITE + " NUMERIC NOT NULL, "
+                + COLUMN_MUSHROOMS_TYPE + " INTEGER NOT NULL, "
+                + COLUMN_MUSHROOMS_CAP_SIZE + " INTEGER NOT NULL, "
+                + COLUMN_MUSHROOMS_CAP_COLOR + " INTEGER NOT NULL, "
+                + COLUMN_MUSHROOMS_STIPE_THICKNESS + " INTEGER NOT NULL, "
+                + COLUMN_MUSHROOMS_STIPE_HIGHT + " INTEGER NOT NULL, "
+                + COLUMN_MUSHROOMS_STIPE_COLOR + " INTEGER NOT NULL, "
+                + COLUMN_MUSHROOMS_FLESH_COLOR + " INTEGER NOT NULL, "
+
+                + "FOREIGN KEY("+ COLUMN_MUSHROOMS_FLESH_COLOR +") REFERENCES " + TABLE_MUSHROOMS_FLESH_COLOR + "("+ COLUMN_MUSHROOMS_FLESH_COLOR_ID +"), "
+                + "FOREIGN KEY("+ COLUMN_MUSHROOMS_STIPE_COLOR +") REFERENCES " + TABLE_MUSHROOMS_STIPE_COLOR + "("+ COLUMN_MUSHROOMS_STIPE_COLOR_ID +"), "
+                + "FOREIGN KEY("+ COLUMN_MUSHROOMS_STIPE_HIGHT +") REFERENCES " + TABLE_MUSHROOMS_STIPE_HIGHT + "("+ COLUMN_MUSHROOMS_STIPE_HIGHT_ID +"), "
+                + "FOREIGN KEY("+ COLUMN_MUSHROOMS_STIPE_THICKNESS +") REFERENCES " + TABLE_MUSHROOMS_STIPE_THICKNESS+ "("+ COLUMN_MUSHROOMS_STIPE_THICKNESS_ID +"), "
+                + "FOREIGN KEY("+ COLUMN_MUSHROOMS_CAP_COLOR +") REFERENCES " + TABLE_MUSHROOMS_CAP_COLOR + "("+ COLUMN_MUSHROOMS_CAP_COLOR_ID +"), "
+                + "FOREIGN KEY("+ COLUMN_MUSHROOMS_CAP_SIZE +") REFERENCES " + TABLE_MUSHROOMS_CAP_SIZE + "("+ COLUMN_MUSHROOMS_CAP_SIZE_ID +"), "
+                + "FOREIGN KEY("+ COLUMN_MUSHROOMS_TYPE +") REFERENCES " + TABLE_MUSHROOMS_TYPE + "("+ COLUMN_MUSHROOMS_TYPE_ID +"));");
+
+
+        db.execSQL("CREATE TABLE " + TABLE_MUSHROOMS_PICTURES + " ("
+                + COLUMN_MUSHROOMS_PICTURES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_MUSHROOMS_PICTURES_ID_MUSHROOM + " INTEGER NOT NULL, "
+                + COLUMN_MUSHROOMS_PICTURES_URL + " TEXT NOT NULL, "
+                + "FOREIGN KEY("+ COLUMN_MUSHROOMS_PICTURES_ID_MUSHROOM +") REFERENCES " + TABLE_MUSHROOMS + "("+ COLUMN_MUSHROOMS_ID +"));");
+
+
+        db.execSQL("CREATE TABLE " + TABLE_ID_MUSHROOM__ID_SEASON + " ("
+                + COLUMN_ID_MUSHROOM + " INTEGER NOT NULL, "
+                + COLUMN_ID_SEASON + " INTEGER NOT NULL);");
+
+
+
+        insertMushroom(db,1,res.getString(R.string.mushroom_name_chanterelle),res.getString(R.string.mushroom_name_chanterelle_other_names),
+                1,2,5,3,1,1,1,
+                res.getString(R.string.herbs_name_aloe_description) , res.getString(R.string.mushroom_name_chanterelle_place),false);
+
+
+        insertIDmushroomIDSeason(db,1,7);
+        insertIDmushroomIDSeason(db,1,8);
+        insertIDmushroomIDSeason(db,1,9);
+
+
+        insertMushroomsPicture(db,"mushrooms/chanterelle1.jpg",1);
+        insertMushroomsPicture(db,"mushrooms/chanterelle2.jpg",1);
+        insertMushroomsPicture(db,"mushrooms/chanterelle3.jpg",1);
+        insertMushroomsPicture(db,"mushrooms/chanterelle4.jpg",1);
+
+
+
     }
 
     @Override
@@ -437,6 +629,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_MUSHROOMS_PICTURES);
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_ID_HERB__ID_SEASON);
+        db.execSQL("DROP TABLE IF EXISTS "+ TABLE_ID_MUSHROOM__ID_SEASON);
 
 
         onCreate(db);
@@ -569,11 +762,108 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         berrieValues.put(COLUMN_HERBS_STEM_HEIGHT, steamHeight);
         berrieValues.put(COLUMN_HERBS_DESCRIPTION, description);
         berrieValues.put(COLUMN_HERBS_PLACE, place);
-        berrieValues.put(COLUMN_BERRIES_FAVORITE, favorite);
+        berrieValues.put(COLUMN_HERBS_FAVORITE, favorite);
 
         db.insert(TABLE_HERBS, null, berrieValues);
     }
 
     //-------------
+
+    private static void insertMushroomsType(SQLiteDatabase db,int id, String type) {
+        ContentValues mushroomsTypeValues = new ContentValues();
+        mushroomsTypeValues.put(COLUMN_MUSHROOMS_TYPE_ID, id);
+        mushroomsTypeValues.put(COLUMN_MUSHROOMS_TYPE_NAME, type);
+
+        db.insert(TABLE_MUSHROOMS_TYPE, null, mushroomsTypeValues);
+    }
+
+    private static void insertCapSize(SQLiteDatabase db,int id, String size) {
+        ContentValues capSizeValues = new ContentValues();
+        capSizeValues.put(COLUMN_MUSHROOMS_CAP_SIZE_ID, id);
+        capSizeValues.put(COLUMN_MUSHROOMS_CAP_SIZE_NAME, size);
+
+        db.insert(TABLE_MUSHROOMS_CAP_SIZE, null, capSizeValues);
+    }
+
+    private static void insertCapColor(SQLiteDatabase db,int id, String color) {
+        ContentValues capColorValues = new ContentValues();
+        capColorValues.put(COLUMN_MUSHROOMS_CAP_COLOR_ID, id);
+        capColorValues.put(COLUMN_MUSHROOMS_CAP_COLOR_NAME, color);
+
+        db.insert(TABLE_MUSHROOMS_CAP_COLOR, null, capColorValues);
+    }
+
+    private static void insertStipeThickness(SQLiteDatabase db,int id, String thickness) {
+        ContentValues stipeThicknessValues = new ContentValues();
+        stipeThicknessValues.put(COLUMN_MUSHROOMS_STIPE_THICKNESS_ID, id);
+        stipeThicknessValues.put(COLUMN_MUSHROOMS_STIPE_THICKNESS_NAME, thickness);
+
+        db.insert(TABLE_MUSHROOMS_STIPE_THICKNESS, null, stipeThicknessValues);
+    }
+
+
+    private static void insertStipeHeight(SQLiteDatabase db,int id, String height) {
+        ContentValues stipeHeightValues = new ContentValues();
+        stipeHeightValues.put(COLUMN_MUSHROOMS_STIPE_HIGHT_ID, id);
+        stipeHeightValues.put(COLUMN_MUSHROOMS_STIPE_HIGHT_NAME, height);
+
+        db.insert(TABLE_MUSHROOMS_STIPE_HIGHT, null, stipeHeightValues);
+    }
+
+    private static void insertStipeColor(SQLiteDatabase db,int id, String color) {
+        ContentValues stipeColorValues = new ContentValues();
+        stipeColorValues.put(COLUMN_MUSHROOMS_STIPE_COLOR_ID, id);
+        stipeColorValues.put(COLUMN_MUSHROOMS_STIPE_COLOR_NAME, color);
+
+        db.insert(TABLE_MUSHROOMS_STIPE_COLOR, null, stipeColorValues);
+    }
+
+    private static void insertFleshColor(SQLiteDatabase db,int id, String color) {
+        ContentValues fleshColorValues = new ContentValues();
+        fleshColorValues.put(COLUMN_MUSHROOMS_FLESH_COLOR_ID, id);
+        fleshColorValues.put(COLUMN_MUSHROOMS_FLESH_COLOR_NAME, color);
+
+        db.insert(TABLE_MUSHROOMS_FLESH_COLOR, null, fleshColorValues);
+    }
+
+    private static void insertIDmushroomIDSeason(SQLiteDatabase db,int idMushroom, int idSeason) {
+        ContentValues idValues = new ContentValues();
+        idValues.put(COLUMN_ID_MUSHROOM, idMushroom);
+        idValues.put(COLUMN_ID_SEASON, idSeason);
+
+        db.insert(TABLE_ID_MUSHROOM__ID_SEASON, null, idValues);
+    }
+
+    private static void insertMushroom(SQLiteDatabase db,int id, String name,String otherNames,int type,int capSize, int capColor, int stipeThickness, int  stipeHeight, int stipeColor,int fleshColor, String description, String place, boolean favorite) {
+        ContentValues berrieValues = new ContentValues();
+        berrieValues.put(COLUMN_MUSHROOMS_ID, id);
+        berrieValues.put(COLUMN_MUSHROOMS_NAME, name);
+        berrieValues.put(COLUMN_MUSHROOMS_OTHERNAMES, otherNames);
+        berrieValues.put(COLUMN_MUSHROOMS_TYPE, type);
+
+        berrieValues.put(COLUMN_MUSHROOMS_CAP_SIZE, capSize);
+        berrieValues.put(COLUMN_MUSHROOMS_CAP_COLOR, capColor);
+        berrieValues.put(COLUMN_MUSHROOMS_STIPE_THICKNESS, stipeThickness);
+        berrieValues.put(COLUMN_MUSHROOMS_STIPE_HIGHT, stipeHeight);
+        berrieValues.put(COLUMN_MUSHROOMS_STIPE_COLOR, stipeColor);
+        berrieValues.put(COLUMN_MUSHROOMS_FLESH_COLOR, fleshColor);
+
+        berrieValues.put(COLUMN_MUSHROOMS_DESCRIPTION, description);
+        berrieValues.put(COLUMN_MUSHROOMS_PLACE, place);
+        berrieValues.put(COLUMN_MUSHROOMS_FAVORITE, favorite);
+
+        db.insert(TABLE_MUSHROOMS, null, berrieValues);
+
+    }
+
+    private static void insertMushroomsPicture(SQLiteDatabase db, String url, int idMushroom) {
+        ContentValues pictureValues = new ContentValues();
+
+        pictureValues.put(COLUMN_MUSHROOMS_PICTURES_URL, url);
+        pictureValues.put(COLUMN_MUSHROOMS_PICTURES_ID_MUSHROOM, idMushroom);
+
+        db.insert(TABLE_MUSHROOMS_PICTURES, null, pictureValues);
+    }
+
 
 }
