@@ -8,6 +8,8 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/htab_appbar"
         android:layout_width="match_parent"
@@ -58,15 +60,53 @@
                 app:tabSelectedTextColor="@android:color/white"
                 app:tabTextColor="@color/white_70"/>
 
+
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
+
+
 
     <android.support.v4.view.ViewPager
         android:id="@+id/htab_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+
+    <FrameLayout
+        android:id="@+id/filterFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="240dp">
+
+        <io.codetail.widget.RevealFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/reveal_items"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+
+
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg" />
+
+
+            </LinearLayout>
+
+
+        </io.codetail.widget.RevealFrameLayout>
+
+
+    </FrameLayout>
 
 
     <android.support.design.widget.FloatingActionButton
